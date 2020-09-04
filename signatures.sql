@@ -9,5 +9,4 @@ CREATE TABLE sigs (
      fname VARCHAR NOT NULL CHECK (fname != ''),
      lname VARCHAR NOT NULL CHECK (lname != ''),
      sig VARCHAR NOT NULL CHECK (sig != ''),
-     time_stamp TIMESTAMP
 );

@@ -28,8 +28,8 @@ app.use(express.static('./public'));
  */
 app.use(
     cookieSession({
-        secret: 'req.session.sigId',
-        keys: '',
+        secret: `something secret`,
+        //keys: '',
         maxAge: 1000 * 60 * 60 * 24 * 14, // after this amount of time the cookie will expire
         // 1 sec x 60 is a minute x 60 is an hour x 24 which is day x 14 is two weeks
     })
@@ -99,7 +99,7 @@ app.get('/thanks', (req, res) => {
         //signatures,
     });
 
-    db.addSig(fname, lname, sig)
+    db.addSig()
         .then((results) => {
             console.log('results: ', results);
             req.session.sigId;
