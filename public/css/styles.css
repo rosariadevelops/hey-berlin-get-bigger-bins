@@ -1,0 +1,26 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: cornsilk;
+    font-family: sans-serif;
+    text-align: center;
+}
+
+canvas {
+    border: 1px dashed;
+}
+
+.petition p,
+.petition form {
+    display: block;
+    margin: 20px;
+}
+.petition input,
+.petition canvas,
+.petition button {
+    display: block;
+    margin: 20px auto;
+}
