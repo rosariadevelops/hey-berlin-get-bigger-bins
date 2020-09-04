@@ -9,15 +9,15 @@ const db = spicedPg('postgres:postgres:postgres@localhost:5432/petition'); // pa
 // SELECT to get first and last names of all who have signed
 module.exports.getSig = () => {
     // ideally name of function should describe what you want to do
-    return db.query('SELECT * FROM signatures');
+    return db.query('SELECT * FROM sigs');
 };
-module.exports.addSig = (first, last, signature) => {
+module.exports.addSig = (fname, lname, sig) => {
     return db.query(
         `
-        INSERT INTO signatures (first, last, signature)
+        INSERT INTO sigs (fname, lname, sig)
         VALUES ($1, $2, $3)
-        RETURNING*`,
-        [first, last, signature]
+        RETURNING id`,
+        [fname, lname, sig]
     );
     // columns in the table, values you are inserting
     // $1, $2, $3 correspond to the values/variables that you are inserting

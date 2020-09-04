@@ -2,11 +2,12 @@
 -- uses a table called signatures
 -- timestamp could be helpful
 
-DROP TABLE IF EXISTS signatures;
+DROP TABLE IF EXISTS sigs;
 
-CREATE TABLE signatures (
+CREATE TABLE sigs (
      id SERIAL PRIMARY KEY,
-     first VARCHAR NOT NULL CHECK (first != ''),
-     last VARCHAR NOT NULL CHECK (last != ''),
-     signature VARCHAR NOT NULL CHECK (sig != '')
+     fname VARCHAR NOT NULL CHECK (fname != ''),
+     lname VARCHAR NOT NULL CHECK (lname != ''),
+     sig VARCHAR NOT NULL CHECK (sig != ''),
+     time_stamp TIMESTAMP
 );
