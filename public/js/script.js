@@ -1,39 +1,39 @@
-const canvas = document.getElementById('canvas');
-const hiddenInput = document.getElementById('hidden');
-const ctx = canvas.getContext('2d');
-//let dataURL = canvas.toDataURL();
-//var dataURL = canvas.toDataURL("image/png");
-canvas.width = 600;
-canvas.height = 200;
+(function () {
+    const canvas = $('#canvas');
+    const ctx = canvas[0].getContext('2d');
+    const hiddenInput = $('#hidden');
+    canvas.width = 600;
+    canvas.height = 200;
 
-ctx.lineJoin = 'round';
-ctx.lineCap = 'round';
-ctx.lineWidth = 4;
-ctx.strokeStyle = '#000000';
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#000000';
 
-let isDrawing = false;
-let locX = 0;
-let locY = 0;
+    let isDrawing = false;
+    let x = 0;
+    let y = 0;
 
-function drawSig(sig) {
-    if (!isDrawing) return; // this stops the drawing if they aren't mousedown
-    ctx.beginPath();
-    ctx.moveTo(locX, locY);
-    ctx.lineTo(sig.offsetX, sig.offsetY);
-    ctx.stroke();
-    [locX, locY] = [sig.offsetX, sig.offsetY];
-}
+    function drawSig(sig) {
+        if (!isDrawing) return;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(sig.offsetX, sig.offsetY);
+        ctx.stroke();
+        [x, y] = [sig.offsetX, sig.offsetY];
+    }
 
-canvas.addEventListener('mousedown', (event) => {
-    isDrawing = true;
-    [locX, locY] = [event.offsetX, event.offsetY];
-});
-canvas.addEventListener('mousemove', drawSig);
-canvas.addEventListener('mouseup', () => (isDrawing = false));
-canvas.addEventListener('mouseout', () => (isDrawing = false));
+    canvas.on('mousedown', (event) => {
+        isDrawing = true;
+        [x, y] = [event.offsetX, event.offsetY];
+    });
 
-let dataURL = canvas.toDataURL('image/png', 1.0);
+    canvas.on('mousemove', drawSig);
 
-hiddenInput.value = dataURL;
-console.log('dataURL: ', dataURL);
-console.log('hidden input: ', hiddenInput);
+    canvas.on('mouseup', (event) => {
+        isDrawing = false;
+        let dataURL = canvas[0].toDataURL();
+        hiddenInput.val(dataURL);
+        console.log('dataURL: ', dataURL);
+    });
+})();

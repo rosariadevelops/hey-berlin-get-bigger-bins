@@ -49,7 +49,6 @@ app.get('/petition', (req, res) => {
             title: 'Petition',
         });
     }
-    //console.log('req.session after: ', req.session);
 });
 
 // PETITION POST REQUEST
@@ -68,7 +67,9 @@ app.post('/petition', (req, res) => {
             .then((idNo) => {
                 req.session.hasSigned = true;
                 req.session.sigIdNumber = idNo.rows[0].id;
+                req.session.sigPic = idNo.rows[0].signature;
                 console.log('req.session.sigIdNumber: ', req.session.sigIdNumber);
+                console.log('req.session.sigPic: ', req.session.sigPic);
                 res.redirect('/thanks');
             })
             .catch((err) => {
@@ -92,6 +93,7 @@ app.get('/thanks', (req, res) => {
                     const numOfSigs = result.rows.length;
                     console.log('numOfSigs: ', numOfSigs);
                     const userSig = user.rows[0].sig;
+                    console.log('userSig: ', userSig);
                     // let firstName = userFirst.charAt(0).toUpperCase() + userFirst.slice(1);
                     // let lastName = userLast.charAt(0).toUpperCase() + userLast.slice(1);
                     res.render('thanks', {
@@ -113,7 +115,7 @@ app.get('/signers', (req, res) => {
         res.redirect('/petition');
     } else {
         db.getSigners().then((data) => {
-            //console.log('data: ', data);
+            // console.log('data: ', dataObj);
             const numOfSigs = data.rows.length;
             const signers = data.rows;
 
