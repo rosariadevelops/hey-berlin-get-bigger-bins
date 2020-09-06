@@ -54,7 +54,7 @@ app.use(function (req, res, next) {
 //console.log('req.session: ', req.session);
 app.get('/', (req, res) => {
     res.redirect('/petition');
-    req.session.cumin = 'Hello!';
+    //req.session.cumin = 'Hello!';
     //console.log('req.session after: ', req.session);
 });
 
@@ -65,7 +65,7 @@ app.get('/petition', (req, res) => {
         title: 'Petition',
     });
     //console.log('req.session: ', req.session);
-    req.session.cumin = 'Hello!';
+    //req.session.cumin = 'Hello!';
     //console.log('req.session after: ', req.session);
 });
 
@@ -74,16 +74,42 @@ app.get('/petition', (req, res) => {
 // inserts all data submitted to the database
 // if there's an error, render the petition template with an err message
 // if there's no error, set a cookie and redirect user to /thanks
-app.post('/petition', (req, res) => {
-    const { submitted } = req.body;
-    if (submitted) {
-        res.cookie('formSigned', true);
-        db.getSig();
 
-        console.log('getSig: ', db.getSig());
+app.post('/petition', (req, res) => {
+    // need to get the input values into the req.body
+    let fname = req.body.fname;
+    let lname = req.body.lname;
+    let sig = req.body.sig;
+    //let sigId = req.body.id;
+    //const { submitted } = req.body;
+    //console.log('body: ', req.body);
+    // && req.url !== '/favicon.ico'
+    //console.log('fname: ', fname);
+    //console.log('lname: ', lname);
+
+    if (req.session.hasSigned) {
         res.redirect('/thanks');
+    } else if (fname === '' || lname === '' || sig === '') {
+        res.render('petition', {
+            layout: 'main',
+            title: 'Petition',
+            error: 'something went wrong',
+            color: 'red',
+        });
     } else {
-        // res.send(`I think this is where the error message on form handlebars goes`);
+        db.addSig(fname, lname, sig)
+            .then(() => {
+                //const data = [fname, lname, sig];
+                console.log('fname: ', fname);
+                console.log('lname: ', lname);
+                req.session.hasSigned = true;
+                //req.session.sigIdNumber = sigId;
+                console.log('req.session.sigIdNumber: ', req.session.sigIdNumber);
+                res.redirect('/thanks');
+            })
+            .catch((err) => {
+                console.log('err in addSig: ', err);
+            });
     }
 });
 
@@ -92,23 +118,34 @@ app.post('/petition', (req, res) => {
 // checks for cookie
 // if no cookie, redirect user to /petition
 app.get('/thanks', (req, res) => {
-    console.log('get request to /thanks has happened');
-    res.render('thanks', {
-        layout: 'main',
-        title: 'Thank you!',
-        //signatures,
-    });
+    //console.log('get request to /thanks has happened');
 
-    db.addSig()
-        .then((results) => {
-            console.log('results: ', results);
-            req.session.sigId;
-            //console.log('yay that worked');
+    db.getSig()
+        .then((result) => {
+            console.log('getSig working');
+            const userId = result[0].id;
+            const userFirst = result[0].fname;
+            const userLast = result[0].lname;
+            const userSig = result[0].sig;
+            const firstName = userFirst.charAt(0).toUpperCase() + userFirst.slice(1);
+            const lastName = userLast.charAt(0).toUpperCase() + userLast.slice(1);
+            console.log('result id: ', userId);
+            console.log('result first name: ', firstName);
+            console.log('result last name: ', lastName);
+            console.log('result sigSrc: ', userSig);
+            res.render('thanks', {
+                layout: 'main',
+                title: 'Thank you!',
+                userId,
+                firstName,
+                lastName,
+                userSig,
+                //signatures,
+            });
         })
         .catch((err) => {
             console.log('err in addCity: ', err);
         });
-    console.log('addSig: ', db.addSig());
 });
 
 app.get('/signers', (req, res) => {

@@ -9,14 +9,24 @@ const db = spicedPg('postgres:postgres:postgres@localhost:5432/petition'); // pa
 // SELECT to get first and last names of all who have signed
 module.exports.getSig = () => {
     // ideally name of function should describe what you want to do
-    return db.query('SELECT * FROM sigs');
+    //return db.query('SELECT * FROM sigs');
+    return db
+        .query(`SELECT * FROM sigs ORDER BY id DESC LIMIT 1;`)
+        .then(function (result) {
+            //console.log('result.rows: ', result.rows);
+            return result.rows;
+        })
+        .catch(function (err) {
+            console.log(err);
+        });
+    // select all from sigs where id equals user id
 };
 module.exports.addSig = (fname, lname, sig) => {
     return db.query(
         `
         INSERT INTO sigs (fname, lname, sig)
         VALUES ($1, $2, $3)
-        RETURNING id`,
+        RETURNING id;`,
         [fname, lname, sig]
     );
     // columns in the table, values you are inserting
