@@ -3,11 +3,11 @@
         <h1>{{title}}</h1>
     </div>
     <div class="thanks">
-        <p>Thanks for signing our petition, {{firstName}} {{lastName}}.Let's continue to make whatever this petition supports actually happen!</h3>
-        <p>___ have signed. Goal: 1 million</p>
-        <p></p>
+        <p>Thanks for signing our petition! Let's continue to make whatever this petition supports actually happen!</h3>
+        <p>{{numOfSigs}} have signed. Goal: 1 million</p>
+        <p class="sig"><img src={{userSig}} /></p>
         <div class="thermometer">Should I make this a partial?</div>
-        <h3><a href="/views/signers.handlebars">View other signers</a></h3>
+        <h3><a href="/signers">View other signers</a></h3>
     </div>
     <p class="proj-footer">© Rosaria Gandar 2020</h3>
 </div>

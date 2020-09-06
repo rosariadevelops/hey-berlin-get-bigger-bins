@@ -5,8 +5,8 @@
 DROP TABLE IF EXISTS sigs;
 
 CREATE TABLE sigs (
-     id SERIAL PRIMARY KEY,
-     fname VARCHAR NOT NULL CHECK (fname != ''),
-     lname VARCHAR NOT NULL CHECK (lname != ''),
-     sig VARCHAR NOT NULL CHECK (sig != '')
+    id SERIAL PRIMARY KEY,
+    fname VARCHAR NOT NULL CHECK (fname != ''),
+    lname VARCHAR NOT NULL CHECK (lname != ''),
+    sig VARCHAR NOT NULL CHECK (sig != '')
 );

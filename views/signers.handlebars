@@ -4,11 +4,13 @@
     </div>
     <div class="signers">
         <p>We the people demand that this important topic be brought to justice</h3>
-        <p>___ have signed. Goal: 1 million</p>
+        <p>{{numOfSigs}} have signed. Goal: 1 million</p>
         <div class="thermometer">Should I make this a partial?</div>
+        {{#signers}}
         <div class="people">
-            {{>signatures}}
+            {{fname}} {{lname}}
         </div>
+        {{/signers}}
     </div>
     <p class="proj-footer">© Rosaria Gandar 2020</h3>
 </div>
