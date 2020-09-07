@@ -45,9 +45,17 @@ module.exports.addUser = (firstname, lastname, email, pword) => {
     );
 };
 
-module.exports.findUser = () => {
+module.exports.findUsers = () => {
     return db.query(`SELECT * FROM users;`);
 };
+
+module.exports.checkEmail = (email) => {
+    return db.query(`SELECT * FROM users WHERE email = ($1);`, [email]);
+};
+
+/* module.exports.findPassword = (pword) => {
+    return db.query(`SELECT pword FROM users WHERE pword = ($1);`, [pword]);
+}; */
 
 module.exports.checkSig = (userId) => {
     return db.query(

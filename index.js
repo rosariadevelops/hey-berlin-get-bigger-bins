@@ -97,7 +97,15 @@ app.post('/log-in', (req, res) => {
     const { firstname, lastname, email, password } = req.body;
     //const errMsg = document.getElementById('error');
 
-    // need to call the compare function
+    // check if user has entered a correct email that is in the users table
+    // if no then render error
+    // if yes then retrieve pword in users and COMPARE to text password entered (these are the arguments)
+    // compare returns a boolean
+    // if false then render error message on page
+    // if true then check if petition signed
+    // if yes then navigate to thanks
+    // if no then navigate to petition
+
     if (firstname === '' || lastname === '' || email === '' || password === '') {
         res.render('log-in', {
             layout: 'main',
@@ -106,14 +114,40 @@ app.post('/log-in', (req, res) => {
             class: '"error"',
         });
     } else {
-        db.findUser()
-            .then((idNum) => {
-                console.log('idNum: ', idNum);
-                req.session.userCreated = true;
-                res.redirect('/thanks');
+        db.checkEmail(email) // pass the email to the function where we select all from column email
+            .then((results) => {
+                console.log('results: ', results); // returns an object with the users details
+                console.log('req email: ', email); // is what the user entered
+                console.log('results.rows.email: ', results.rows[0].email); // is the email that is stored
+                bc.compare(password, results.rows[0].pword)
+                    .then((exists) => {
+                        // compares the two, then passes a boolean result. If true then user exists
+                        console.log('what is the result of the compare?');
+                        if (exists) {
+                            // if true then set cookie and redirect to thanks
+                            console.log('result is: ', exists);
+                            const userId = results.rows[0].id;
+                            console.log('userId', userId);
+                            req.session.userExists = true;
+                            req.session.userId = userId;
+                            res.redirect('/thanks');
+                        } else {
+                            // if false then render page with error
+                            console.log('result is: ', exists);
+                            res.render('log-in', {
+                                layout: 'main',
+                                title: 'Please log-in',
+                                wrongEmail: 'Your email or password are incorrect.',
+                                class: '"error"',
+                            });
+                        }
+                    })
+                    .catch((err) => {
+                        console.log('err in compare: ', err);
+                    });
             })
             .catch((err) => {
-                console.log('err in addUser: ', err);
+                console.log('err in checkEmail: ', err);
             });
     }
 });
@@ -216,3 +250,17 @@ app.get('/signers', (req, res) => {
 
 // LISTEN
 app.listen(8080, () => console.log('petition server is running...'));
+
+/* if (email == emails.rows[i].email) {
+                        console.log('chosen email: ', emails.rows[i].email);
+                        const userEmail = emails.rows[i].email;
+                        db.findPassword(userEmail)
+                            .then((pwordResult) => {
+                                console.log('pwordResult: ', pwordResult);
+                                //bc.compare(req.body.password, hash).then(() => {});
+                                req.session.userCreated = true;
+                                res.redirect('/thanks');
+                            })
+                            .catch((err) => {
+                                console.log('err in findPassword: ', err);
+                            }); */
