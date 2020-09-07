@@ -30,7 +30,7 @@
 
     canvas.on('mousemove', drawSig);
 
-    canvas.on('mouseup', (event) => {
+    canvas.on('mouseup', () => {
         isDrawing = false;
         let dataURL = canvas[0].toDataURL();
         hiddenInput.val(dataURL);

@@ -8,8 +8,6 @@ const db = spicedPg('postgres:postgres:postgres@localhost:5432/petition'); // pa
 // SELECT to get total number of signers (use *count*)
 // SELECT to get first and last names of all who have signed
 module.exports.getSigners = () => {
-    // ideally name of function should describe what you want to do
-    //return db.query('SELECT * FROM sigs');
     return db.query(`SELECT * FROM sigs;`);
     // select all from sigs where id equals user id
 };
@@ -23,16 +21,38 @@ module.exports.getSignature = (id) => {
     );
 };
 
-module.exports.addSig = (fname, lname, sig) => {
+module.exports.addSig = (fname, lname, sig, userId) => {
     return db.query(
         `
-        INSERT INTO sigs (fname, lname, sig)
-        VALUES ($1, $2, $3)
+        INSERT INTO sigs (fname, lname, sig, user_id)
+        VALUES ($1, $2, $3, $4)
         RETURNING id`,
-        [fname, lname, sig]
+        [fname, lname, sig, userId]
     );
     // columns in the table, values you are inserting
     // $1, $2, $3 correspond to the values/variables that you are inserting
     // this protects from SQL Injection
     // we have to assume whatever users give us cannot be trusted
+};
+
+module.exports.addUser = (firstname, lastname, email, pword) => {
+    return db.query(
+        `
+        INSERT INTO users (firstname, lastname, email, pword)
+        VALUES ($1, $2, $3, $4)
+        RETURNING id`,
+        [firstname, lastname, email, pword]
+    );
+};
+
+module.exports.findUser = () => {
+    return db.query(`SELECT * FROM users;`);
+};
+
+module.exports.checkSig = (userId) => {
+    return db.query(
+        `SELECT sig FROM sigs 
+        WHERE id = ($1);`,
+        [userId]
+    );
 };

@@ -24,3 +24,12 @@ canvas {
     display: block;
     margin: 20px auto;
 }
+
+#error {
+    opacity: 0;
+    visibility: hidden;
+}
+.errVisible {
+    opacity: 1;
+    visibility: visible;
+}
