@@ -251,16 +251,15 @@ app.get('/signers', (req, res) => {
 // LISTEN
 app.listen(8080, () => console.log('petition server is running...'));
 
-/* if (email == emails.rows[i].email) {
-                        console.log('chosen email: ', emails.rows[i].email);
-                        const userEmail = emails.rows[i].email;
-                        db.findPassword(userEmail)
-                            .then((pwordResult) => {
-                                console.log('pwordResult: ', pwordResult);
-                                //bc.compare(req.body.password, hash).then(() => {});
-                                req.session.userCreated = true;
-                                res.redirect('/thanks');
-                            })
-                            .catch((err) => {
-                                console.log('err in findPassword: ', err);
-                            }); */
+/*  console.log('chosen email: ', emails.rows[i].email);
+    const userEmail = emails.rows[i].email;
+    db.findPassword(userEmail)
+        .then((pwordResult) => {
+            console.log('pwordResult: ', pwordResult);
+            bc.compare(req.body.password, hash).then(() => {});
+                req.session.userCreated = true;
+                res.redirect('/thanks');
+            })
+            .catch((err) => {
+                console.log('err in findPassword: ', err);
+            }); */
