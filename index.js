@@ -16,8 +16,8 @@ app.use(
     cookieSession({
         secret: `something secret`,
         //keys: '',
-        maxAge: 1000 * 60 * 60 * 24 * 14, // after this amount of time the cookie will expire
-        // 1 sec x 60 is a minute x 60 is an hour x 24 which is day x 14 is two weeks
+        maxAge: 1000 * 60 * 60 * 24, // after this amount of time the cookie will expire
+        // 1 sec x 60 is a minute x 60 is an hour x 24 which is day
     })
 );
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -45,40 +45,38 @@ app.get('/sign-up', (req, res) => {
 
 // SIGN-UP PAGE POST REQUEST
 app.post('/sign-up', (req, res) => {
-    //const password = req.body.pword;
-    //console.log('req body: ', req.body);
-
-    // console.log('req body: ', req.body);
-
     //const errMsg = document.getElementById('error');
+    console.log('req body: ', req.body);
+    const { firstname, lastname, email, password } = req.body;
 
-    /* f (firstname === '' || lastname === '' || email === '' || pword === '') {
+    if (firstname === '' || lastname === '' || email === '' || password === '') {
         res.render('registration', {
             layout: 'main',
             title: 'Please sign-up',
             error: 'Please make sure all input fields have been filled.',
             class: '"error"',
         });
-    } else { */
-    // we need to hash directly upon POST request
-    // plain text password is never written
-    const { firstname, lastname, email, password } = req.body;
-    bc.hash(password)
-        .then((password) => {
-            const pword = password;
-            console.log('req body password: ', pword);
-            // return example:  $2a$10$zpPuwhpqORBO0pbDTFgxSO0hAIKDsXbn0twuDAZCmNtAEI.iLA5RS
-            db.addUser(firstname, lastname, email, pword);
-        })
-        .then(() => {
-            req.session.userCreated = true;
-            console.log('user created');
-            res.redirect('/petition');
-        })
-        .catch((err) => {
-            console.log('err in hash: ', err);
-        });
-    //}
+    } else {
+        // we need to hash directly upon POST request
+        // plain text password is never written
+        // I currently have a glaring issue in that the text password is stored in the header
+        bc.hash(password)
+            .then((password) => {
+                const pword = password;
+                console.log('req body password: ', pword);
+                // return example:  $2a$10$zpPuwhpqORBO0pbDTFgxSO0hAIKDsXbn0twuDAZCmNtAEI.iLA5RS
+                db.addUser(firstname, lastname, email, pword).then((result) => {
+                    //console.log('result: ', result);
+                    req.session.userCreated = true;
+                    req.session.userId = result.rows[0].id;
+                    console.log('user created');
+                    res.redirect('/petition');
+                });
+            })
+            .catch((err) => {
+                console.log('err in hash: ', err);
+            });
+    }
 });
 
 // LOGIN PAGE GET REQUEST
@@ -96,10 +94,11 @@ app.get('/log-in', (req, res) => {
 // LOGIN PAGE POST REQUEST
 app.post('/log-in', (req, res) => {
     console.log('req body: ', req.body);
-    const { firstname, lastname, email, pword } = req.body;
+    const { firstname, lastname, email, password } = req.body;
     //const errMsg = document.getElementById('error');
 
-    if (firstname === '' || lastname === '' || email === '' || pword === '') {
+    // need to call the compare function
+    if (firstname === '' || lastname === '' || email === '' || password === '') {
         res.render('log-in', {
             layout: 'main',
             title: 'Please log-in',
