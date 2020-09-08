@@ -70,13 +70,46 @@ app.post('/sign-up', (req, res) => {
                     req.session.userCreated = true;
                     req.session.userId = result.rows[0].id;
                     console.log('user created');
-                    res.redirect('/petition');
+                    res.redirect('/profile');
                 });
             })
             .catch((err) => {
                 console.log('err in hash: ', err);
             });
     }
+});
+
+// PROFILE PAGE GET REQUEST
+app.get('/profile', (req, res) => {
+    if (!req.session.userCreated) {
+        res.redirect('/sign-up');
+    } else {
+        res.render('profile', {
+            layout: 'main',
+            title: 'Add more information',
+        });
+    }
+});
+
+// PROFILE PAGE POST REQUEST
+app.post('/profile', (req, res) => {
+    //const errMsg = document.getElementById('error');
+    console.log('req body: ', req.body);
+    let { age, city, url, user_id } = req.body;
+    user_id = req.session.userId;
+    console.log('user_id: ', user_id);
+
+    db.createProfile(age, city, url, user_id)
+        .then((profile) => {
+            console.log('profile: ', profile);
+            // the user_id is the id from the sign-up?
+            const profId = profile.rows[0].user_id;
+            req.session.profId = profId;
+            res.redirect('/petition');
+        })
+        .catch((err) => {
+            console.log('err in updateProfile: ', err);
+        });
 });
 
 // LOGIN PAGE GET REQUEST
@@ -96,15 +129,6 @@ app.post('/log-in', (req, res) => {
     console.log('req body: ', req.body);
     const { firstname, lastname, email, password } = req.body;
     //const errMsg = document.getElementById('error');
-
-    // check if user has entered a correct email that is in the users table
-    // if no then render error
-    // if yes then retrieve pword in users and COMPARE to text password entered (these are the arguments)
-    // compare returns a boolean
-    // if false then render error message on page
-    // if true then check if petition signed
-    // if yes then navigate to thanks
-    // if no then navigate to petition
 
     if (firstname === '' || lastname === '' || email === '' || password === '') {
         res.render('log-in', {
@@ -167,24 +191,27 @@ app.get('/petition', (req, res) => {
 
 // PETITION POST REQUEST
 app.post('/petition', (req, res) => {
-    const { fname, lname, sig } = req.body;
+    let { sig, user_id } = req.body;
+    user_id = req.session.userId;
     //const errMsg = document.getElementById('error');
 
-    if (fname === '' || lname === '' || sig === '') {
+    if (sig === '') {
         res.render('petition', {
             layout: 'main',
             title: 'Petition',
-            error: 'Please enter your first and last name and sign your signature.',
+            error: 'Please sign your signature.',
             class: '"error"',
         });
         // I don't want to render this page again, I only want the error to appear
         //errMsg.addClass('errVisible');
     } else {
-        db.addSig(fname, lname, sig)
+        db.addSig(sig, user_id)
             .then((idNo) => {
+                // console.log('idNo: ', idNo);
                 req.session.hasSigned = true;
                 req.session.sigIdNumber = idNo.rows[0].id;
                 req.session.sigPic = idNo.rows[0].signature;
+
                 //console.log('req.session.sigIdNumber: ', req.session.sigIdNumber);
                 //console.log('req.session.sigPic: ', req.session.sigPic);
                 res.redirect('/thanks');
@@ -202,7 +229,7 @@ app.get('/thanks', (req, res) => {
         res.redirect('/petition');
     } else {
         db.getSignature(req.session.sigIdNumber).then((signee) => {
-            db.getSigners()
+            db.getSignedUsers()
                 .then((result) => {
                     //console.log('getSigner working');
                     //console.log('user: ', user);
@@ -210,7 +237,7 @@ app.get('/thanks', (req, res) => {
                     const numOfSigs = result.rows.length;
                     console.log('numOfSigs: ', numOfSigs);
                     const userSig = signee.rows[0].sig;
-                    console.log('userSig: ', userSig);
+                    //console.log('userSig: ', userSig);
                     // let firstName = userFirst.charAt(0).toUpperCase() + userFirst.slice(1);
                     // let lastName = userLast.charAt(0).toUpperCase() + userLast.slice(1);
                     res.render('thanks', {
@@ -233,16 +260,34 @@ app.get('/signers', (req, res) => {
     if (!req.session.hasSigned) {
         res.redirect('/petition');
     } else {
-        db.getSigners().then((data) => {
-            // console.log('data: ', data);
-            const numOfSigs = data.rows.length;
-            const signers = data.rows;
-
+        db.updateProfile().then((data) => {
+            const allSigners = data.rows;
+            const numOfSigs = allSigners.length;
+            console.log('allSigners: ', allSigners);
             res.render('signers', {
                 layout: 'main',
                 title: 'Like-minded individuals',
                 numOfSigs,
-                signers,
+                allSigners,
+            });
+        });
+    }
+});
+
+// SIGNERS BY CITY TEMPLATE GET REQUEST
+app.get('/signers/:city', (req, res) => {
+    let { city } = req.params;
+    console.log('city: ', city);
+    // const activeCity = cities.find((item) => item.directory === city); Pulled from portfolio, not sure if need
+    if (!req.session.hasSigned) {
+        res.redirect('/petition');
+    } else {
+        db.getCity().then((cityData) => {
+            console.log('city data: ', cityData);
+            res.render('signers', {
+                layout: 'main',
+                title: 'All fellow signers from: ',
+                city,
             });
         });
     }
@@ -250,16 +295,3 @@ app.get('/signers', (req, res) => {
 
 // LISTEN
 app.listen(8080, () => console.log('petition server is running...'));
-
-/*  console.log('chosen email: ', emails.rows[i].email);
-    const userEmail = emails.rows[i].email;
-    db.findPassword(userEmail)
-        .then((pwordResult) => {
-            console.log('pwordResult: ', pwordResult);
-            bc.compare(req.body.password, hash).then(() => {});
-                req.session.userCreated = true;
-                res.redirect('/thanks');
-            })
-            .catch((err) => {
-                console.log('err in findPassword: ', err);
-            }); */

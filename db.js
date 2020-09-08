@@ -7,10 +7,6 @@ const db = spicedPg('postgres:postgres:postgres@localhost:5432/petition'); // pa
 // INSERT when the user signs petition and submits (first, last, signature)
 // SELECT to get total number of signers (use *count*)
 // SELECT to get first and last names of all who have signed
-module.exports.getSigners = () => {
-    return db.query(`SELECT * FROM sigs;`);
-    // select all from sigs where id equals user id
-};
 
 module.exports.getSignature = (id) => {
     return db.query(
@@ -21,18 +17,14 @@ module.exports.getSignature = (id) => {
     );
 };
 
-module.exports.addSig = (fname, lname, sig, userId) => {
+module.exports.addSig = (sig, userId) => {
     return db.query(
         `
-        INSERT INTO sigs (fname, lname, sig, user_id)
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO sigs (sig, user_id)
+        VALUES ($1, $2)
         RETURNING id`,
-        [fname, lname, sig, userId]
+        [sig, userId]
     );
-    // columns in the table, values you are inserting
-    // $1, $2, $3 correspond to the values/variables that you are inserting
-    // this protects from SQL Injection
-    // we have to assume whatever users give us cannot be trusted
 };
 
 module.exports.addUser = (firstname, lastname, email, pword) => {
@@ -50,7 +42,12 @@ module.exports.findUsers = () => {
 };
 
 module.exports.checkEmail = (email) => {
-    return db.query(`SELECT * FROM users WHERE email = ($1);`, [email]);
+    return db.query(
+        `
+    SELECT * FROM users 
+    WHERE email = ($1);`,
+        [email]
+    );
 };
 
 /* module.exports.findPassword = (pword) => {
@@ -63,4 +60,33 @@ module.exports.checkSig = (userId) => {
         WHERE id = ($1);`,
         [userId]
     );
+};
+
+module.exports.createProfile = (age, city, url, user_id) => {
+    return db.query(
+        `
+        INSERT INTO user_profiles (age, city, url, user_id)
+        VALUES ($1, $2, $3, $4)
+        RETURNING user_id`,
+        [age, city, url, user_id]
+    );
+};
+
+module.exports.updateProfile = () => {
+    return db.query(
+        `
+        SELECT * FROM sigs
+        LEFT JOIN users
+        ON sigs.user_id = users.id
+        LEFT JOIN user_profiles
+        ON sigs.user_id = user_profiles.user_id;`
+    );
+};
+
+module.exports.getSignedUsers = () => {
+    return db.query(`SELECT * FROM sigs;`);
+};
+
+module.exports.getCity = () => {
+    return db.query(`SELECT city from user_profiles;`);
 };

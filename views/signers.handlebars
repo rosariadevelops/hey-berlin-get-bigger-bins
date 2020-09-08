@@ -1,16 +1,25 @@
 <div class="signers-container">
     <div class="title-container">
-        <h1>{{title}}</h1>
+        {{#if city}}
+            <h1>{{cityTitle}} {{city}}</h1>
+        {{else}}
+            <h1>{{title}}</h1>
+        {{/if}}
     </div>
     <div class="signers">
         <p>We the people demand that this important topic be brought to justice</h3>
         <p>{{numOfSigs}} have signed. Goal: 1 million</p>
         <div class="thermometer">Should I make this a partial?</div>
-        {{#signers}}
         <div class="people">
-            {{fname}} {{lname}}
+            {{#allSigners}}
+                {{#if url}}
+                    <p><a href={{url}}>{{firstname}} {{lastname}}</a> | {{age}} | <a href="/signers/{{city}}">{{city}}</a></p>
+                {{else }}
+                    <p>{{firstname}} {{lastname}} | {{age}} | <a href="/signers/{{city}}">{{city}}</a></p>
+                {{/if}}
+            {{/allSigners}}
         </div>
-        {{/signers}}
+        
     </div>
     <p class="proj-footer">© Rosaria Gandar 2020</h3>
 </div>
