@@ -1,21 +1,17 @@
 <div class="signers-container">
     <div class="title-container">
-        {{#if city}}
-            <h1>{{cityTitle}} {{city}}</h1>
-        {{else}}
-            <h1>{{title}}</h1>
-        {{/if}}
+        <h1>{{title}}</h1>
     </div>
     <div class="signers">
         <p>We the people demand that this important topic be brought to justice</h3>
         <p>{{numOfSigs}} have signed. Goal: 1 million</p>
-        <div class="thermometer">Should I make this a partial?</div>
+        {{!-- <div class="thermometer">Should I make this a partial?</div> --}}
         <div class="people">
             {{#allSigners}}
                 {{#if url}}
-                    <p><a href={{url}}>{{firstname}} {{lastname}}</a> | {{age}} | <a href="/signers/{{city}}">{{city}}</a></p>
+                    <p><a href={{url}}>{{firstname}} {{lastname}}</a> | {{#if age}}{{age}} | {{/if}}<a href="/signers/{{city}}">{{city}}</a></p>
                 {{else }}
-                    <p>{{firstname}} {{lastname}} | {{age}} | <a href="/signers/{{city}}">{{city}}</a></p>
+                    <p>{{firstname}} {{lastname}} | {{#if age}}{{age}} | {{/if}} <a href="/signers/{{city}}">{{city}}</a></a></p>
                 {{/if}}
             {{/allSigners}}
         </div>

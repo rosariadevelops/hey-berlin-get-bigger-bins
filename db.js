@@ -87,6 +87,15 @@ module.exports.getSignedUsers = () => {
     return db.query(`SELECT * FROM sigs;`);
 };
 
-module.exports.getCity = () => {
-    return db.query(`SELECT city from user_profiles;`);
+module.exports.getCity = (city) => {
+    return db.query(
+        `
+    SELECT * FROM users
+    INNER JOIN user_profiles
+    ON users.id = user_profiles.user_id
+    WHERE city = ($1);`,
+        [city]
+    );
+    // add WHERE clause and pass the city
+    // WHERE clause in notes
 };

@@ -282,12 +282,15 @@ app.get('/signers/:city', (req, res) => {
     if (!req.session.hasSigned) {
         res.redirect('/petition');
     } else {
-        db.getCity().then((cityData) => {
-            console.log('city data: ', cityData);
+        db.getCity(city).then((cityData) => {
+            console.log('city data: ', cityData.rows);
+            const numOfSigs = cityData.rows.length;
+            console.log('numOfSigs: ', numOfSigs);
             res.render('signers', {
                 layout: 'main',
                 title: 'All fellow signers from: ',
                 city,
+                numOfSigs,
             });
         });
     }
