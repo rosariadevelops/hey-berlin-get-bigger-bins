@@ -39,8 +39,15 @@ module.exports.addUser = (firstname, lastname, email, pword) => {
     );
 };
 
-module.exports.findUsers = () => {
-    return db.query(`SELECT * FROM users;`);
+module.exports.findUser = (userId) => {
+    return db.query(
+        `
+        SELECT * FROM users
+        INNER JOIN user_profiles
+        ON users.id = user_profiles.user_id
+        WHERE user_id = ($1);`,
+        [userId]
+    );
 };
 
 module.exports.checkEmail = (email) => {
@@ -74,7 +81,7 @@ module.exports.createProfile = (age, city, url, user_id) => {
     );
 };
 
-module.exports.updateProfile = () => {
+module.exports.popProfile = () => {
     return db.query(
         `
         SELECT * FROM sigs
@@ -100,4 +107,15 @@ module.exports.getCity = (city) => {
     );
     // add WHERE clause and pass the city
     // WHERE clause in notes
+};
+
+module.exports.updateProfile = (firstname, lastname, email, age, city, url) => {
+    return db.query(
+        `
+        INSERT INTO users (firstname, lastname, email, age, city, url)
+        VALUES ($1, $2, $3, $4, $5, $6)
+        ON CONFLICT (email)
+        DO UPDATE SET firstname = $1, lastname = $2, email = $3, age = $4, city = $5, url = $6;`,
+        [firstname, lastname, email, age, city, url]
+    );
 };

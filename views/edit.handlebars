@@ -6,10 +6,19 @@
         <p>Please add some more information</h3>
         <div class="edit-form">
             <form method="POST">
+                <label>First Name</label>
                 <input type="text" name="firstname" value="{{firstname}}" autocomplete="off" >
+                <label>Last Name</label>
                 <input type="text" name="lastname" value="{{lastname}}" autocomplete="off" >
+                <label>Email</label>
+                <input type="email" name="email" value="{{email}}" autocomplete="off" >
+                <label>Password</label>
+                <input type="password" name="password" autocomplete="off" >
+                <label>Age</label>
                 <input type="text" name="age" value="{{age}}" autocomplete="off" >
+                <label>City</label>
                 <input type="text" name="city" value="{{city}}" autocomplete="off" >
+                <label>Website</label>
                 <input type="text" name="url" value="{{url}}" autocomplete="off" >
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <button type="submit" name="submitted" value="submitted">Update Profile</button>

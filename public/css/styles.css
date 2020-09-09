@@ -4,7 +4,7 @@
 
 body {
     margin: 0;
-    background-color: cornsilk;
+    background-color: aliceblue;
     font-family: sans-serif;
     text-align: center;
 }
@@ -32,4 +32,14 @@ canvas {
 .errVisible {
     opacity: 1;
     visibility: visible;
+}
+
+.edit-form form {
+    max-width: 250px;
+    margin: 0 auto;
+    text-align: left;
+}
+.edit-form form input {
+    margin-bottom: 20px;
+    display: block;
 }
