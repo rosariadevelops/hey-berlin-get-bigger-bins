@@ -1,5 +1,7 @@
 const spicedPg = require('spiced-pg'); // this is our middleman
-const db = spicedPg('postgres:postgres:postgres@localhost:5432/petition'); // passing middleman some config info
+//const db = spicedPg('postgres:postgres:postgres@localhost:5432/petition'); // passing middleman some config info
+const db = spicedPg(process.env.DATABASE_URL || 'postgres:postgres:postgres@localhost:5432/petition');
+
 // localhost:5423 is a standard port for database
 // localhost:5432/nameofdatabase
 // spicedpg is written by David but based on pg npm module as a way to talk to database

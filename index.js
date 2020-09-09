@@ -2,6 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const db = require('./db');
+//const db = spicedPg(process.env.DATABASE_URL || 'postgres:postgres:postgres@localhost:5432/petition');
 const bc = require('./bc');
 const handlebars = require('express-handlebars');
 const cookieSession = require('cookie-session');
@@ -19,6 +20,7 @@ app.use(
         maxAge: 1000 * 60 * 60 * 24, // after this amount of time the cookie will expire
         // 1 sec x 60 is a minute x 60 is an hour x 24 which is day
     })
+    // there's something about this that is throwing my live site
 );
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(csurf()); // the placement of this matters. Must come after express encoded and after cookie expression
@@ -224,7 +226,6 @@ app.post('/petition', (req, res) => {
 
 // THANKS GET REQUEST
 app.get('/thanks', (req, res) => {
-    //console.log('get request to /thanks has happened');
     if (!req.session.hasSigned) {
         res.redirect('/petition');
     } else {
@@ -252,6 +253,27 @@ app.get('/thanks', (req, res) => {
                 });
         });
     }
+});
+
+// THANKS PAGE TO EDIT PROFILE POST REQUEST
+app.post('/thanks', (req, res) => {
+    //const errMsg = document.getElementById('error');
+    console.log('req body: ', req.body);
+    let { age, city, url, user_id } = req.body;
+    user_id = req.session.userId;
+    console.log('user_id: ', user_id);
+
+    /* db.createProfile(age, city, url, user_id)
+        .then((profile) => {
+            console.log('profile: ', profile);
+            // the user_id is the id from the sign-up?
+            const profId = profile.rows[0].user_id;
+            req.session.profId = profId;
+            res.redirect('/petition');
+        })
+        .catch((err) => {
+            console.log('err in updateProfile: ', err);
+        }); */
 });
 
 // SIGNERS TEMPLATE GET REQUEST
@@ -296,5 +318,19 @@ app.get('/signers/:city', (req, res) => {
     }
 });
 
+// EDIT PROFILE PAGE GET REQUEST
+app.get('/profile/edit', (req, res) => {
+    if (!req.session.userCreated) {
+        res.redirect('/sign-up');
+    } else {
+        res.render('edit', {
+            layout: 'main',
+            title: 'Edit your profile',
+        });
+    }
+});
+
 // LISTEN
-app.listen(8080, () => console.log('petition server is running...'));
+//app.listen(8080, () => console.log('petition server is running...'));
+app.listen(process.env.PORT || 8080, () => console.log('Server Listening'));
+console.log('process.env: ', process.env.PORT);

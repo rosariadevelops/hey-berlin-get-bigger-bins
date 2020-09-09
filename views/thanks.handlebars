@@ -8,6 +8,18 @@
         <p class="sig"><img src={{userSig}} /></p>
         <div class="thermometer">Should I make this a partial?</div>
         <h3><a href="/signers">View other signers</a></h3>
+        <div class="edit-form">
+            <form method="POST">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                <button type="submit" name="submitted" value="submitted">Edit your Profile</button>
+            </form>
+        </div>
+        <div class="delete-form">
+            <form method="POST">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                <button type="submit" name="submitted" value="submitted">Delete your Profile</button>
+            </form>
+        </div>
     </div>
     <p class="proj-footer">© Rosaria Gandar 2020</h3>
 </div>

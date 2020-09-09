@@ -1,0 +1,20 @@
+<div class="edit-container">
+    <div class="title-container">
+        <h1>{{title}}</h1>
+    </div>
+    <div class="edit-profile">
+        <p>Please add some more information</h3>
+        <div class="edit-form">
+            <form method="POST">
+                <input type="text" name="firstname" value="{{firstname}}" autocomplete="off" >
+                <input type="text" name="lastname" value="{{lastname}}" autocomplete="off" >
+                <input type="text" name="age" value="{{age}}" autocomplete="off" >
+                <input type="text" name="city" value="{{city}}" autocomplete="off" >
+                <input type="text" name="url" value="{{url}}" autocomplete="off" >
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                <button type="submit" name="submitted" value="submitted">Update Profile</button>
+            </form>
+        </div>
+    </div>
+    <p class="proj-footer">© Rosaria Gandar 2020</h3>
+</div>
