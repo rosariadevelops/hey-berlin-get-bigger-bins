@@ -139,7 +139,8 @@ app.post('/log-in', (req, res) => {
                             console.log('result is: ', exists);
                             const userId = results.rows[0].id;
                             console.log('userId', userId);
-                            req.session.userExists = true;
+                            //req.session.userExists = true;
+                            req.session.hasLoggedIn = true;
                             req.session.userId = userId;
                             res.redirect('/thanks');
                         } else {
@@ -317,13 +318,13 @@ app.get('/signers/:city', (req, res) => {
 
 // EDIT PROFILE PAGE GET REQUEST
 app.get('/profile/edit', (req, res) => {
-    let userId = req.session.userId;
-    console.log('user-id: ', userId);
+    let userId = req.session.profId;
+    console.log('user-id: ', profId);
 
     if (!req.session.userCreated) {
         res.redirect('/sign-up');
     } else {
-        db.findUser(userId)
+        db.getUserInfo(userId)
             .then((data) => {
                 const userDetails = data.rows[0];
                 console.log('userDetails: ', userDetails);
@@ -341,7 +342,7 @@ app.get('/profile/edit', (req, res) => {
                 });
             })
             .catch((err) => {
-                console.log('err in findUser: ', err);
+                console.log('err in getUserInfo: ', err);
             });
     }
 });
@@ -354,21 +355,31 @@ app.post('/profile/edit', (req, res) => {
     user_id = req.session.userId;
     console.log('user_id: ', user_id);
 
-    db.updateProfile(firstname, lastname, email, age, city, url)
-        .then((data) => {
-            // const allSigners = data.rows;
-            // const numOfSigs = allSigners.length;
-            console.log('data: ', data);
-            res.render('thanks', {
-                layout: 'main',
-                title: 'Like-minded individuals',
-                //numOfSigs,
-                //allSigners,
+    db.updateUsersTable(user_id, firstname, lastname, email).then(() => {
+        console.log('updateUsersTable function running');
+        db.updateUserProfileTable(age, city, url, user_id)
+            .then((newInfo) => {
+                console.log('newInfo: ', newInfo);
+                //const userDetails = data.rows[0];
+                //console.log('userDetails: ', userDetails);
+                //const { firstname, lastname, email, pword, age, city, url } = userDetails;
+                res.render('edit', {
+                    layout: 'main',
+                    title: 'Edit your profile',
+                    firstname,
+                    lastname,
+                    email,
+                    //pword,
+                    age,
+                    city,
+                    url,
+                    confirm: 'Your profile has been updated.',
+                });
+            })
+            .catch((err) => {
+                console.log('err in updateProfile: ', err);
             });
-        })
-        .catch((err) => {
-            console.log('err in popProfile: ', err);
-        });
+    });
 });
 
 // LISTEN

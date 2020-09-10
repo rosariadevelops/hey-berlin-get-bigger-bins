@@ -39,7 +39,7 @@ module.exports.addUser = (firstname, lastname, email, pword) => {
     );
 };
 
-module.exports.findUser = (userId) => {
+module.exports.getUserInfo = (userId) => {
     return db.query(
         `
         SELECT * FROM users
@@ -109,13 +109,25 @@ module.exports.getCity = (city) => {
     // WHERE clause in notes
 };
 
-module.exports.updateProfile = (firstname, lastname, email, age, city, url) => {
+module.exports.updateUsersTable = (id, firstname, lastname, email) => {
     return db.query(
         `
-        INSERT INTO users (firstname, lastname, email, age, city, url)
-        VALUES ($1, $2, $3, $4, $5, $6)
-        ON CONFLICT (email)
-        DO UPDATE SET firstname = $1, lastname = $2, email = $3, age = $4, city = $5, url = $6;`,
-        [firstname, lastname, email, age, city, url]
+        UPDATE users
+        SET firstname = ($2), lastname = ($3), email = ($4)
+        WHERE id = ($1);`,
+        [id, firstname, lastname, email]
     );
 };
+//update set not upsert because
+
+module.exports.updateUserProfileTable = (age, city, url, user_id) => {
+    return db.query(
+        `
+        INSERT INTO user_profiles (age, city, url)
+        VALUES ($1, $2, $3)
+        ON CONFLICT (user_id)
+        DO UPDATE SET age = $4, city = $5, url = $6;`,
+        [age, city, url, user_id]
+    );
+};
+// use userId to upsert the information
