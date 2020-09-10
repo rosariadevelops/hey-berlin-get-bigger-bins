@@ -12,7 +12,7 @@ CREATE TABLE users (
 
 DROP TABLE IF EXISTS user_profiles CASCADE;
 
-CREATE TABLE user_profiles(
+CREATE TABLE user_profiles (
     id SERIAL PRIMARY KEY,
     age INT,
     city VARCHAR(255),

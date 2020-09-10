@@ -13,7 +13,7 @@
                 <label>Email</label>
                 <input type="email" name="email" value="{{email}}" autocomplete="off" >
                 <label>Password</label>
-                <input type="password" name="password" autocomplete="off" >
+                <input id="password" type="password" name="password" autocomplete="off" >
                 <label>Age</label>
                 <input type="text" name="age" value="{{age}}" autocomplete="off" >
                 <label>City</label>
@@ -21,9 +21,20 @@
                 <label>Website</label>
                 <input type="text" name="url" value="{{url}}" autocomplete="off" >
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
-                <button type="submit" name="submitted" value="submitted">Update Profile</button>
+                <div class="update-nav">
+                    <p><a href="/thanks">Cancel</a></p>
+                    <button type="submit" name="submitted" value="submitted">Update Profile</button>
+                </div>
+                {{#if confirm}}
+                    <p>{{confirm}}</p>
+                {{/if}}
             </form>
+            <p><a href="/thanks">Back to Profile</a></p>
+            <div class="delete-profile">
+            <p><a href="/profile/delete">Delete your Profile</a></p>
         </div>
+        </div>
+        
     </div>
     <p class="proj-footer">© Rosaria Gandar 2020</h3>
 </div>

@@ -207,6 +207,7 @@ app.post('/petition', (req, res) => {
 
 // THANKS GET REQUEST
 app.get('/thanks', (req, res) => {
+    console.log('req.session.sigIdNumber: ', req.session.sigIdNumber);
     if (!req.session.hasSigned) {
         res.redirect('/petition');
     } else {
@@ -235,24 +236,25 @@ app.get('/thanks', (req, res) => {
 // THANKS PAGE TO DELETE SIGNATURE POST REQUEST
 app.post('/thanks', (req, res) => {
     console.log('req body: ', req.body);
-    //let { age, city, url, user_id } = req.body;
-    //user_id = req.session.userId;
-    //console.log('user_id: ', user_id);
+    let { sig } = req.body;
+    const user_id = req.session.userId;
+    console.log('user_id: ', user_id);
+    console.log('hasSigned before delete: ', req.session.hasSigned);
 
-    /* db.createProfile(age, city, url, user_id)
-        .then((profile) => {
-            console.log('profile: ', profile);
-            // the user_id is the id from the sign-up?
-            const profId = profile.rows[0].user_id;
-            req.session.profId = profId;
+    db.deleteSig(user_id)
+        .then((result) => {
+            console.log('result: ', result);
+            console.log('user_id value after delete: ', user_id);
+            req.session.hasSigned = false;
+            console.log('req.session.hasSigned after delete: ', req.session.hasSigned);
             res.redirect('/petition');
         })
         .catch((err) => {
-            console.log('err in updateProfile: ', err);
-        }); */
+            console.log('err in deleteSig: ', err);
+        });
 });
 
-// THANKS PAGE TO DELETE PROFILE POST REQUEST
+// CONFIRMATION PAGE TO DELETE PROFILE POST REQUEST
 app.post('/thanks', (req, res) => {
     console.log('req body: ', req.body);
     //let { age, city, url, user_id } = req.body;
@@ -318,8 +320,8 @@ app.get('/signers/:city', (req, res) => {
 
 // EDIT PROFILE PAGE GET REQUEST
 app.get('/profile/edit', (req, res) => {
-    let userId = req.session.profId;
-    console.log('user-id: ', profId);
+    let userId = req.session.userId;
+    console.log('user-id: ', userId);
 
     if (!req.session.userCreated) {
         res.redirect('/sign-up');
@@ -328,14 +330,14 @@ app.get('/profile/edit', (req, res) => {
             .then((data) => {
                 const userDetails = data.rows[0];
                 console.log('userDetails: ', userDetails);
-                const { firstname, lastname, email, pword, age, city, url } = userDetails;
+                const { firstname, lastname, email, password, age, city, url } = userDetails;
                 res.render('edit', {
                     layout: 'main',
                     title: 'Edit your profile',
                     firstname,
                     lastname,
                     email,
-                    pword,
+                    password,
                     age,
                     city,
                     url,
@@ -351,35 +353,63 @@ app.get('/profile/edit', (req, res) => {
 app.post('/profile/edit', (req, res) => {
     //const errMsg = document.getElementById('error');
     console.log('req body: ', req.body);
-    let { firstname, lastname, email, age, city, url, user_id } = req.body;
+    let { firstname, lastname, email, password, age, city, url, user_id } = req.body;
     user_id = req.session.userId;
     console.log('user_id: ', user_id);
+    console.log('password: ', password);
 
-    db.updateUsersTable(user_id, firstname, lastname, email).then(() => {
-        console.log('updateUsersTable function running');
-        db.updateUserProfileTable(age, city, url, user_id)
-            .then((newInfo) => {
-                console.log('newInfo: ', newInfo);
-                //const userDetails = data.rows[0];
-                //console.log('userDetails: ', userDetails);
-                //const { firstname, lastname, email, pword, age, city, url } = userDetails;
-                res.render('edit', {
-                    layout: 'main',
-                    title: 'Edit your profile',
-                    firstname,
-                    lastname,
-                    email,
-                    //pword,
-                    age,
-                    city,
-                    url,
-                    confirm: 'Your profile has been updated.',
+    const passwordEmpty = '';
+
+    if (password === passwordEmpty) {
+        db.updateUsersTable(user_id, firstname, lastname, email).then(() => {
+            console.log('updateUsersTable function running');
+            db.updateUserProfileTable(age, city, url, user_id)
+                .then(() => {
+                    res.render('edit', {
+                        layout: 'main',
+                        title: 'Edit your profile',
+                        firstname,
+                        lastname,
+                        email,
+                        //pword,
+                        age,
+                        city,
+                        url,
+                        confirm: 'Your profile has been updated.',
+                    });
+                })
+                .catch((err) => {
+                    console.log('err in updateUsersTable: ', err);
                 });
-            })
-            .catch((err) => {
-                console.log('err in updateProfile: ', err);
+        });
+    } else {
+        bc.hash(password).then((password) => {
+            //const password = pword;
+            console.log('req body password: ', password);
+
+            db.updatePassword(user_id, firstname, lastname, email, password).then(() => {
+                console.log('password update: ', password);
+                db.updateUserProfileTable(age, city, url, user_id)
+                    .then(() => {
+                        res.render('edit', {
+                            layout: 'main',
+                            title: 'Edit your profile',
+                            firstname,
+                            lastname,
+                            email,
+                            //pword,
+                            age,
+                            city,
+                            url,
+                            confirm: 'Your profile has been updated.',
+                        });
+                    })
+                    .catch((err) => {
+                        console.log('err in updateUsersTable: ', err);
+                    });
             });
-    });
+        });
+    }
 });
 
 // LISTEN

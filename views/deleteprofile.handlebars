@@ -1,0 +1,17 @@
+<div class="deleteprofile-container">
+    <div class="title-container">
+        <h1>{{title}}</h1>
+    </div>
+    <div class="deleteprofile">
+        <p>Are you sure you want to delete your profile?</h3>
+        <p>This will log you out and delete all of your personal data.</p>
+        <div class="delete-profile">
+            <form method="POST">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                <p><a href="/profile/edit"></a>Cancel</p>
+                <button type="submit" name="submitted" value="submitted">Throw my trash out!</button>
+            </form>
+        </div>
+    </div>
+    <p class="proj-footer">© Rosaria Gandar 2020</h3>
+</div>

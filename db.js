@@ -77,7 +77,7 @@ module.exports.createProfile = (age, city, url, user_id) => {
         INSERT INTO user_profiles (age, city, url, user_id)
         VALUES ($1, $2, $3, $4)
         RETURNING user_id`,
-        [age, city, url, user_id]
+        [age || null, city || null, url || null, user_id]
     );
 };
 
@@ -100,8 +100,10 @@ module.exports.getCity = (city) => {
     return db.query(
         `
     SELECT * FROM users
-    INNER JOIN user_profiles
-    ON users.id = user_profiles.user_id
+    JOIN sigs
+    ON users.id = sigs.user_id
+    JOIN user_profiles
+    ON sigs.user_id = user_profiles.user_id
     WHERE city = ($1);`,
         [city]
     );
@@ -118,16 +120,33 @@ module.exports.updateUsersTable = (id, firstname, lastname, email) => {
         [id, firstname, lastname, email]
     );
 };
-//update set not upsert because
 
 module.exports.updateUserProfileTable = (age, city, url, user_id) => {
     return db.query(
         `
-        INSERT INTO user_profiles (age, city, url)
-        VALUES ($1, $2, $3)
+        INSERT INTO user_profiles (age, city, url, user_id)
+        VALUES ($1, $2, $3, $4)
         ON CONFLICT (user_id)
-        DO UPDATE SET age = $4, city = $5, url = $6;`,
+        DO UPDATE SET age = $1, city = $2, url = $3, user_id = $4;`,
         [age, city, url, user_id]
     );
 };
-// use userId to upsert the information
+
+module.exports.updatePassword = (id, firstname, lastname, email, pword) => {
+    return db.query(
+        `
+        UPDATE users
+        SET firstname = ($2), lastname = ($3), email = ($4), pword = ($5)
+        WHERE id = ($1);`,
+        [id, firstname, lastname, email, pword]
+    );
+};
+
+module.exports.deleteSig = (user_id) => {
+    return db.query(
+        `
+        DELETE FROM sigs
+        WHERE user_id = ($1);`,
+        [user_id]
+    );
+};
