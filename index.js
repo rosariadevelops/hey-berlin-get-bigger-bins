@@ -115,7 +115,7 @@ app.post('/sign-up', (req, res) => {
 });
 
 // PROFILE PAGE GET REQUEST
-app.get('/addprofile', requireLoggedInUser, (req, res) => {
+app.get('/addprofile', (req, res) => {
     res.render('addprofile', {
         layout: 'main',
     });
@@ -146,9 +146,9 @@ app.get('/sign-in', requireLoggedInUser, (req, res) => {
 
 // LOGIN PAGE POST REQUEST
 app.post('/sign-in', (req, res) => {
-    const { firstname, lastname, email, password } = req.body;
+    const { email, password } = req.body;
 
-    if (firstname === '' || lastname === '' || email === '' || password === '') {
+    if (email === '' || password === '') {
         res.render('login', {
             layout: 'main',
             emptyerror: 'Please fill all fields to proceed',
@@ -157,7 +157,8 @@ app.post('/sign-in', (req, res) => {
         db.checkEmail(email)
             .then((results) => {
                 console.log('results: ', results.rows);
-                if (results.rows == undefined) {
+                // if results.rows.length === 0
+                if (results.rows.length === 0) {
                     console.log('result does not match any existing account');
                     res.render('login', {
                         layout: 'main',
@@ -166,12 +167,19 @@ app.post('/sign-in', (req, res) => {
                 } else {
                     bc.compare(password, results.rows[0].pword)
                         .then((result) => {
-                            console.log('result:', result);
-                            console.log('user account found');
-                            const userId = results.rows[0].id;
-                            console.log('userId', userId);
-                            req.session.userId = userId;
-                            res.redirect('/thanks');
+                            if (result) {
+                                console.log('result:', result);
+                                console.log('user account found');
+                                const userId = results.rows[0].id;
+                                console.log('userId', userId);
+                                req.session.userId = userId;
+                                res.redirect('/thanks');
+                            } else {
+                                res.render('login', {
+                                    layout: 'main',
+                                    wrongCreds: 'The entered email or password are incorrect. Please try again',
+                                });
+                            }
                         })
                         .catch((err) => {
                             console.log('err in compare: ', err);
@@ -408,7 +416,7 @@ app.post('/profile/edit', (req, res) => {
 app.get('/signout', (req, res) => {
     req.session.userId = null;
     req.session.hasLoggedIn = null;
-    res.redirect('/log-in');
+    res.redirect('/sign-in');
 });
 
 // LISTEN

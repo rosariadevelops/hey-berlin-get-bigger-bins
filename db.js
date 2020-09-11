@@ -59,10 +59,6 @@ module.exports.checkEmail = (email) => {
     );
 };
 
-/* module.exports.findPassword = (pword) => {
-    return db.query(`SELECT pword FROM users WHERE pword = ($1);`, [pword]);
-}; */
-
 module.exports.checkSig = (userId) => {
     return db.query(
         `SELECT sig FROM sigs 
