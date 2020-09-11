@@ -4,15 +4,88 @@
 
 body {
     margin: 0;
-    background-color: aliceblue;
+    background-color: #c2eaf7;
     font-family: sans-serif;
     text-align: center;
+    color: #ff3f00;
+    font-family: 'archiv_grotesk_trialRgtrial', Helvetica, Arial, sans-serif;
+    width: 100vw;
+    min-height: 100vh;
+    border: 10px solid #ff3f00;
 }
 
+h1 {
+    font-family: 'right_groteskwide_medium', Helvetica, Arial, sans-serif;
+    color: #ff3f00;
+    font-size: 100px;
+    margin: 0;
+}
+h2 {
+    font-size: 60px;
+    margin: 0;
+}
+h3 {
+    font-size: 40px;
+    margin: 0;
+}
+h4 {
+    font-size: 30px;
+    margin: 0;
+}
+
+/* -------------------------- NAVIGATION -------------------------*/
+.logo {
+    font-family: 'obrazecbold', Helvetica, Arial, sans-serif;
+    font-size: 20px;
+}
+
+/* -------------------------- WELCOME PAGE -------------------------*/
+h1.welcome {
+    font-family: 'right_groteskwide_medium', Helvetica, Arial, sans-serif;
+    color: #ff3f00;
+    font-size: 7.5vw;
+    margin: 90px 0 60px;
+    line-height: 14vw;
+}
+span.bigger {
+    font-family: 'right_groteskspatial_black', 'right_groteskwide_medium', Helvetica, Arial, sans-serif;
+    font-size: 21.7vw;
+}
+
+.enter-link {
+    position: absolute;
+    bottom: 39px;
+    left: 10px;
+    right: 10px;
+    padding: 0px;
+}
+
+.enter-link a {
+    font-size: 60px;
+    letter-spacing: 0px;
+    padding: 20px 40px 0;
+    color: #ff3f00;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* -------------------------- REGISTRATION PAGE -------------------------*/
+input:required:invalid,
+input:focus:invalid {
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+input:required:valid {
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+/* -------------------------- ADD PROFILE PAGE -------------------------*/
+
+/* -------------------------- SIGNATURE PAGE -------------------------*/
 canvas {
     border: 1px dashed;
 }
-
 .petition p,
 .petition form {
     display: block;
@@ -24,6 +97,20 @@ canvas {
     display: block;
     margin: 20px auto;
 }
+
+/* -------------------------- PROFILE/THANKS PAGE -------------------------*/
+
+/* -------------------------- ALL SIGNERS PAGE -------------------------*/
+
+/* -------------------------- SIGNERS BY CITY PAGE -------------------------*/
+
+/* -------------------------- EDIT PROFILE PAGE -------------------------*/
+
+/* -------------------------- DELETE PROFILE PAGE -------------------------*/
+
+/* -------------------------- LOG-IN PAGE -------------------------*/
+
+/* -------------------------- LOG-OUT MODAL -------------------------*/
 
 #error {
     opacity: 0;
@@ -42,4 +129,18 @@ canvas {
 .edit-form form input {
     margin-bottom: 20px;
     display: block;
+}
+
+.proj-footer {
+    display: none;
+    position: absolute;
+    bottom: 64px;
+    right: -52.5px;
+    margin: 0;
+    font-size: 7px;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transform: rotate(90deg);
 }

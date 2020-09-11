@@ -1,0 +1,70 @@
+@font-face {
+    font-family: 'right_groteskcompact_black';
+    src: url('../fonts/right-grotesk/rightgrotesk-compactblack-webfont.woff2') format('woff2'),
+        url('../fonts/right-grotesk/rightgrotesk-compactblack-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'right_groteskmedium';
+    src: url('../fonts/right-grotesk/rightgrotesk-medium-webfont.woff2') format('woff2'),
+        url('../fonts/right-grotesk/rightgrotesk-medium-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'right_grotesknarrow_light';
+    src: url('../fonts/right-grotesk/rightgrotesk-narrowlight-webfont.woff2') format('woff2'),
+        url('../fonts/right-grotesk/rightgrotesk-narrowlight-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'right_groteskspatial_black';
+    src: url('../fonts/right-grotesk/rightgrotesk-spatialblack-webfont.woff2') format('woff2'),
+        url('../fonts/right-grotesk/rightgrotesk-spatialblack-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'right_grotesktall_fine';
+    src: url('../fonts/right-grotesk/rightgrotesk-tallfine-webfont.woff2') format('woff2'),
+        url('../fonts/right-grotesk/rightgrotesk-tallfine-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'right_grotesktight_medium';
+    src: url('../fonts/right-grotesk/rightgrotesk-tightmedium-webfont.woff2') format('woff2'),
+        url('../fonts/right-grotesk/rightgrotesk-tightmedium-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'right_groteskwide_medium';
+    src: url('../fonts/right-grotesk/rightgrotesk-widemedium-webfont.woff2') format('woff2'),
+        url('../fonts/right-grotesk/rightgrotesk-widemedium-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'archiv_grotesk_trialRgtrial';
+    src: url('../fonts/archiv-grotesk/archivgrotesktrial-regulartrial-webfont.woff2') format('woff2'),
+        url('../fonts/archiv-grotesk/archivgrotesktrial-regulartrial-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'obrazecbold';
+    src: url('../fonts/obrazec/obrazec-webfont.woff2') format('woff2'), url('../fonts/obrazec/obrazec-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}

@@ -1,3 +1,4 @@
+{{> nav }}
 <div class="signers-container">
     <div class="title-container">
         <h1>{{title}}</h1>
@@ -11,10 +12,21 @@
                 {{#if url}}
                     <p><a href={{url}}>{{firstname}} {{lastname}}</a> | {{#if age}}{{age}} | {{/if}}<a href="/signers/{{city}}">{{city}}</a></p>
                 {{else }}
-                    <p>{{firstname}} {{lastname}} | {{#if age}}{{age}} | {{/if}} <a href="/signers/{{city}}">{{city}}</a></a></p>
+                    <p>{{firstname}} {{lastname}} | {{#if age}}{{age}} | {{/if}} <a href="/signers/{{city}}">{{city}}</a></p>
                 {{/if}}
             {{/allSigners}}
         </div>
+        {{!-- {{#if city}}
+            <div class="cityblock">
+                {{#allSigners}}
+                    {{#if url}}
+                        <p><a href={{url}}>{{firstname}} {{lastname}}</a> | {{#if age}}{{age}}</p>
+                    {{else }}
+                        <p>{{firstname}} {{lastname}} | {{#if age}}{{age}} | {{/if}}</p>
+                    {{/if}}
+                {{/allSigners}}
+            </div>
+        {{/if}} --}}
         
     </div>
     <p class="proj-footer">© Rosaria Gandar 2020</h3>

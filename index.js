@@ -12,34 +12,64 @@ const csurf = require('csurf');
 app.engine('handlebars', handlebars());
 app.set('view engine', 'handlebars');
 app.use(express.static('./public'));
+
 app.use(
     cookieSession({
         secret: `something secret`,
-        //keys: '',
         maxAge: 1000 * 60 * 60 * 24, // after this amount of time the cookie will expire
-        // 1 sec x 60 is a minute x 60 is an hour x 24 which is day
     })
 );
+
 app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(csurf()); // the placement of this matters. Must come after express encoded and after cookie expression
+
 app.use(function (req, res, next) {
-    // gives my templates the csrfToken
     res.locals.csrfToken = req.csrfToken();
-    // prevents clickjacking
     res.setHeader('x-frame-options', 'deny');
     next();
 });
 
+const requireUnsignedUser = (req, res, next) => {
+    if (!req.session.userId && req.url != '/login' && req.url != '/sign-up') {
+        res.redirect('/sign-up');
+    } else {
+        next();
+    }
+};
+
+const requireLoggedInUser = (req, res, next) => {
+    if (req.session.hasLoggedIn) {
+        res.redirect('/thanks');
+    } else {
+        next();
+    }
+};
+
+const requireLoggedOutUser = (req, res, next) => {
+    if (!req.session.hasLoggedIn) {
+        res.redirect('/log-in');
+    } else {
+        next();
+    }
+};
+
 // ROOT GET REQUEST
-app.get('/', (req, res) => {
-    res.redirect('/sign-up');
+app.get('/', requireLoggedInUser, (req, res) => {
+    res.redirect('/welcome');
+});
+
+// WELCOME PAGE GET REQUEST
+app.get('/welcome', requireLoggedInUser, (req, res) => {
+    res.render('welcome', {
+        layout: 'main',
+    });
 });
 
 // SIGN-UP PAGE GET REQUEST
-app.get('/sign-up', (req, res) => {
+app.get('/sign-up', requireLoggedInUser, (req, res) => {
     res.render('registration', {
         layout: 'main',
-        title: 'Please sign-up',
     });
 });
 
@@ -66,9 +96,10 @@ app.post('/sign-up', (req, res) => {
                 // return example:  $2a$10$zpPuwhpqORBO0pbDTFgxSO0hAIKDsXbn0twuDAZCmNtAEI.iLA5RS
                 db.addUser(firstname, lastname, email, pword).then((result) => {
                     req.session.userCreated = true;
+                    req.session.hasLoggedIn = true;
                     req.session.userId = result.rows[0].id;
                     console.log('user created');
-                    res.redirect('/profile');
+                    res.redirect('/addprofile');
                 });
             })
             .catch((err) => {
@@ -78,22 +109,22 @@ app.post('/sign-up', (req, res) => {
 });
 
 // PROFILE PAGE GET REQUEST
-app.get('/profile', (req, res) => {
+app.get('/addprofile', requireUnsignedUser, requireLoggedInUser, (req, res) => {
     if (!req.session.userCreated) {
         res.redirect('/sign-up');
     } else {
-        res.render('profile', {
+        res.render('addprofile', {
             layout: 'main',
-            title: 'Add more information',
         });
     }
 });
 
 // PROFILE PAGE POST REQUEST
-app.post('/profile', (req, res) => {
+app.post('/addprofile', (req, res) => {
     //const errMsg = document.getElementById('error');
     let { age, city, url, user_id } = req.body;
     user_id = req.session.userId;
+    console.log('req.body: ', req.body);
 
     db.createProfile(age, city, url, user_id)
         .then((profile) => {
@@ -107,7 +138,7 @@ app.post('/profile', (req, res) => {
 });
 
 // LOGIN PAGE GET REQUEST
-app.get('/log-in', (req, res) => {
+app.get('/log-in', requireUnsignedUser, requireLoggedInUser, (req, res) => {
     if (!req.session.userCreated) {
         res.redirect('/sign-up');
     } else {
@@ -164,7 +195,7 @@ app.post('/log-in', (req, res) => {
 });
 
 // PETITION PAGE GET REQUEST
-app.get('/petition', (req, res) => {
+app.get('/petition', requireUnsignedUser, requireLoggedOutUser, (req, res) => {
     if (req.session.hasSigned) {
         res.redirect('/thanks');
     } else {
@@ -206,7 +237,7 @@ app.post('/petition', (req, res) => {
 });
 
 // THANKS GET REQUEST
-app.get('/thanks', (req, res) => {
+app.get('/thanks', requireUnsignedUser, requireLoggedOutUser, (req, res) => {
     console.log('req.session.sigIdNumber: ', req.session.sigIdNumber);
     if (!req.session.hasSigned) {
         res.redirect('/petition');
@@ -245,7 +276,7 @@ app.post('/thanks', (req, res) => {
         .then((result) => {
             console.log('result: ', result);
             console.log('user_id value after delete: ', user_id);
-            req.session.hasSigned = false;
+            req.session.hasSigned = null;
             console.log('req.session.hasSigned after delete: ', req.session.hasSigned);
             res.redirect('/petition');
         })
@@ -275,7 +306,7 @@ app.post('/thanks', (req, res) => {
 });
 
 // SIGNERS TEMPLATE GET REQUEST
-app.get('/signers', (req, res) => {
+app.get('/signers', requireUnsignedUser, requireLoggedOutUser, (req, res) => {
     if (!req.session.hasSigned) {
         res.redirect('/petition');
     } else {
@@ -298,7 +329,7 @@ app.get('/signers', (req, res) => {
 });
 
 // SIGNERS BY CITY TEMPLATE GET REQUEST
-app.get('/signers/:city', (req, res) => {
+app.get('/signers/:city', requireUnsignedUser, requireLoggedOutUser, (req, res) => {
     let { city } = req.params;
     console.log('city: ', city);
     if (!req.session.hasSigned) {
@@ -308,18 +339,20 @@ app.get('/signers/:city', (req, res) => {
             console.log('city data: ', cityData.rows);
             const numOfSigs = cityData.rows.length;
             console.log('numOfSigs: ', numOfSigs);
+            const allSigners = cityData.rows;
             res.render('signers', {
                 layout: 'main',
                 title: 'All fellow signers from: ',
                 city,
                 numOfSigs,
+                allSigners,
             });
         });
     }
 });
 
 // EDIT PROFILE PAGE GET REQUEST
-app.get('/profile/edit', (req, res) => {
+app.get('/profile/edit', requireUnsignedUser, requireLoggedOutUser, (req, res) => {
     let userId = req.session.userId;
     console.log('user-id: ', userId);
 
@@ -410,6 +443,13 @@ app.post('/profile/edit', (req, res) => {
             });
         });
     }
+});
+
+// LOGOUT GET REQUEST
+app.get('/signout', (req, res) => {
+    req.session.userId = null;
+    req.session.hasLoggedIn = null;
+    res.redirect('/login');
 });
 
 // LISTEN
