@@ -1,18 +1,22 @@
 <div class="login-container">
     <div class="title-container">
-        <h1>{{title}}</h1>
+        <h1>Sign-in to your account.</h1>
     </div>
     <div class="login">
-        <p>Welcome to the Unknown Petition! Please log-in.</h3>
         <div class="login-form">
-            <p>This is where an error message should go?</p>
             <form method="POST">
-                <input type="text" name="firstname" placeholder="First Name" autocomplete="off" required>
-                <input type="text" name="lastname" placeholder="Last Name" autocomplete="off" required>
-                <input type="email" name="email" placeholder="Email Address" autocomplete="off" required>
-                <input type="password" name="password" placeholder="Password" autocomplete="off" required>
+                <input type="text" name="firstname" placeholder="First Name" autocomplete="off">
+                <input type="text" name="lastname" placeholder="Last Name" autocomplete="off">
+                <input type="email" name="email" placeholder="Email Address" autocomplete="off">
+                <input type="password" name="password" placeholder="Password" autocomplete="off">
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <button type="submit" name="submitted" value="submitted">Log in</button>
+                {{#if emptyerror}}
+                <p class="error">{{emptyerror}}</p>
+                {{/if}}
+                {{#if wrongCreds}}
+                <p class="error">{{wrongCreds}}</p>
+                {{/if}}
             </form>
         </div>
     </div>
