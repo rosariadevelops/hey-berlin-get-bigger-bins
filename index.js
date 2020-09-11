@@ -225,8 +225,9 @@ app.post('/petition', (req, res) => {
 
 // THANKS GET REQUEST
 app.get('/thanks', requireLoggedOutUser, requireHasNotSigned, (req, res) => {
-    db.getSignature(req.session.sigIdNumber).then((signee) => {
-        db.getSignedUsers()
+    let userSigId = req.session.sigIdNumber;
+    db.getSignedUsers().then((signee) => {
+        db.getSignature(userSigId)
             .then((result) => {
                 const numOfSigs = result.rows.length;
                 console.log('numOfSigs: ', numOfSigs);
@@ -242,7 +243,7 @@ app.get('/thanks', requireLoggedOutUser, requireHasNotSigned, (req, res) => {
                 });
             })
             .catch((err) => {
-                console.log('err in getSigner: ', err);
+                console.log('err in getSignature: ', err);
             });
     });
 });
@@ -250,7 +251,7 @@ app.get('/thanks', requireLoggedOutUser, requireHasNotSigned, (req, res) => {
 // THANKS PAGE TO DELETE SIGNATURE POST REQUEST
 app.post('/thanks', (req, res) => {
     console.log('req body: ', req.body);
-    let { sig } = req.body;
+    //let { sig } = req.body;
     const user_id = req.session.userId;
     console.log('user_id: ', user_id);
     console.log('hasSigned before delete: ', req.session.hasSigned);
@@ -268,24 +269,32 @@ app.post('/thanks', (req, res) => {
         });
 });
 
+// CONFIRMATION PAGE TO DELETE PROFILE GET REQUEST
+app.get('/profile/delete', requireLoggedOutUser, requireHasNotSigned, (req, res) => {
+    res.render('deleteprofile', {
+        layout: 'main',
+    });
+});
+
 // CONFIRMATION PAGE TO DELETE PROFILE POST REQUEST
-app.post('/thanks', (req, res) => {
+app.post('/profile/delete', (req, res) => {
     console.log('req body: ', req.body);
-    //let { age, city, url, user_id } = req.body;
-    //user_id = req.session.userId;
+    let { user_id } = req.body;
+    user_id = req.session.userId;
     //console.log('user_id: ', user_id);
 
-    /* db.createProfile(age, city, url, user_id)
-        .then((profile) => {
-            console.log('profile: ', profile);
-            // the user_id is the id from the sign-up?
-            const profId = profile.rows[0].user_id;
-            req.session.profId = profId;
-            res.redirect('/petition');
+    db.deleteUser(user_id)
+        .then((result) => {
+            console.log('result: ', result);
+            console.log('user_id value after delete: ', user_id);
+            req.session.hasSigned = null;
+            req.session.userId = null;
+            console.log('user has been deleted');
+            res.redirect('/sign-up');
         })
         .catch((err) => {
-            console.log('err in updateProfile: ', err);
-        }); */
+            console.log('err in deleteSig: ', err);
+        });
 });
 
 // SIGNERS TEMPLATE GET REQUEST

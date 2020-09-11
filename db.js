@@ -19,6 +19,10 @@ module.exports.getSignature = (id) => {
     );
 };
 
+module.exports.getSignedUsers = () => {
+    return db.query(`SELECT COUNT(*) FROM sigs;`);
+};
+
 module.exports.addSig = (sig, userId) => {
     return db.query(
         `
@@ -88,10 +92,6 @@ module.exports.popProfile = () => {
     );
 };
 
-module.exports.getSignedUsers = () => {
-    return db.query(`SELECT * FROM sigs;`);
-};
-
 module.exports.getCity = (city) => {
     return db.query(
         `
@@ -142,6 +142,15 @@ module.exports.deleteSig = (user_id) => {
     return db.query(
         `
         DELETE FROM sigs
+        WHERE user_id = ($1);`,
+        [user_id]
+    );
+};
+
+module.exports.deleteUser = (user_id) => {
+    return db.query(
+        `
+        DELETE FROM users
         WHERE user_id = ($1);`,
         [user_id]
     );
