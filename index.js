@@ -214,6 +214,7 @@ app.post('/petition', (req, res) => {
             .then((idNo) => {
                 console.log('idNo: ', idNo);
                 req.session.hasSigned = true;
+                req.session.sigIdNumber = idNo.rows[0].id;
                 res.redirect('/thanks');
             })
             .catch((err) => {
@@ -229,6 +230,7 @@ app.get('/thanks', requireLoggedOutUser, requireHasNotSigned, (req, res) => {
             .then((result) => {
                 const numOfSigs = result.rows.length;
                 console.log('numOfSigs: ', numOfSigs);
+                console.log;
                 const userSig = signee.rows[0].sig;
                 // let firstName = userFirst.charAt(0).toUpperCase() + userFirst.slice(1);
                 // let lastName = userLast.charAt(0).toUpperCase() + userLast.slice(1);
