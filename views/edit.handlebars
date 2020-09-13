@@ -1,39 +1,45 @@
-{{> nav }}
-<div class="edit-container">
+<div class="edit-container page-nav-container">
+    {{> nav }}
     <div class="title-container">
         <h1>{{title}}</h1>
     </div>
     <div class="edit-profile">
-        <p>Please add some more information</h3>
         <div class="edit-form">
             <form method="POST">
-                <label>First Name</label>
+                
                 <input type="text" name="firstname" value="{{firstname}}" autocomplete="off" >
-                <label>Last Name</label>
+                <label>First Name</label>
+                
                 <input type="text" name="lastname" value="{{lastname}}" autocomplete="off" >
-                <label>Email</label>
+                <label>Last Name</label>
+                
                 <input type="email" name="email" value="{{email}}" autocomplete="off" >
-                <label>Password</label>
+                <label>Email</label>
+                
                 <input id="password" type="password" name="password" autocomplete="off" >
-                <label>Age</label>
+                <label>Password</label>
+                
                 <input type="text" name="age" value="{{age}}" autocomplete="off" >
-                <label>City</label>
+                <label>Age</label>
+                
                 <input type="text" name="city" value="{{city}}" autocomplete="off" >
-                <label>Website</label>
+                <label>City</label>
+                
                 <input type="text" name="url" value="{{url}}" autocomplete="off" >
+                <label>Website</label>
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <div class="update-nav">
-                    <p><a href="/thanks">Cancel</a></p>
+                    {{#if confirm}}
+                        <p>{{confirm}}</p>
+                    {{/if}}
                     <button type="submit" name="submitted" value="submitted">Update Profile</button>
+                    <div class="negatives">
+                        <p><a href="/profile">Cancel</a></p>
+                        <p class="delete-prof"><a href="/profile/delete">Delete your Profile</a></p>
+                    </div>
                 </div>
-                {{#if confirm}}
-                    <p>{{confirm}}</p>
-                {{/if}}
+                
             </form>
-            <p><a href="/thanks">Back to Profile</a></p>
-            <div class="delete-profile">
-            <p><a href="/profile/delete">Delete your Profile</a></p>
-        </div>
         </div>
         
     </div>

@@ -1,0 +1,55 @@
+<div class="profile-container page-nav-container">
+{{> nav }}
+    <div class="title-container portal">
+        <h1>Your Profile</h1>
+    </div>
+    <div class="profile">
+    <div class="left">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="label">Name</td>
+                        <td class="data">{{firstname}} {{lastname}}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Email</td>
+                        <td class="data">{{email}}</td>
+                    </tr>
+                    {{#if age}}
+                    <tr>
+                        <td class="label">Age</td>
+                        <td class="data">{{age}}</td>
+                    </tr>
+                    {{/if}}
+                    {{#if city}}
+                    <tr>
+                        <td class="label">City</td>
+                        <td class="data">{{city}}</td>
+                    </tr>
+                    {{/if}}
+                    {{#if url}}
+                    <tr>
+                        <td class="label">Website</td>
+                        <td class="data">{{url}}</td>
+                    </tr>
+                    {{/if}}
+                    <tr>
+                        <td class="label">Signature</td>
+                        <td class="data"><img src={{userSig}} /></td>
+                    </tr>
+                </tbody>
+            </table>
+    </div>
+    <div class="right">
+        <div class="links">
+            <div><a href="/profile/edit">Edit your Profile <span class="arrow-right">→</span></a></div>
+            <div class="delete-sig">
+                <form method="POST">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                    <button type="submit" name="submitted" value="submitted">Re-do your Signature <span class="arrow-redo">↺</span></button>
+                </form>
+            </div>
+        </div>   
+    </div>
+    </div>
+</div>

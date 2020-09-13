@@ -1,22 +1,26 @@
-{{> nav }}
-<div class="thanks-container">
-    <div class="title-container">
-        <h1>{{title}}</h1>
+<div class="thanks-container page-nav-container">
+    {{> nav }}
+    <div class="title-container portal">
+        <h1>Thanks, {{firstname}}!</h1>
     </div>
     <div class="thanks">
-        <p>Thanks for signing our petition! Let's continue to make whatever this petition supports actually happen!</h3>
-        <p>{{numOfSigs}} have signed. Goal: 1 million</p>
-        <p class="sig"><img src={{userSig}} /></p>
-        <div class="thermometer">Should I make this a partial?</div>
-        <h3><a href="/signers">View other signers</a></h3>
-        <div class="edit-profile">
-                <p><a href="/profile/edit">Edit your Profile</a></p>
+        <div class="left">
+            <h3>You have joined <b>{{sigCount}}</b> other signers. Your signature means we are one step closer to a cleaner city.</h3>
+            <p class="sig"><img src={{userSig}} /></p>
         </div>
-        <div class="delete-sig">
-            <form method="POST">
-                <input type="hidden" name="_csrf" value="{{csrfToken}}">
-                <button type="submit" name="submitted" value="submitted">Re-do your Signature</button>
-            </form>
+
+        <div class="right">
+            
+            <div class="links">
+                <div><a href="/signers">View other signers <span class="arrow-diag">↗</span></a></div>
+                <div><a href="/profile">View your Profile <span class="arrow-right">→</span></a></div>
+                <div class="delete-sig">
+                    <form method="POST">
+                        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                        <button type="submit" name="submitted" value="submitted">Re-do your Signature <span class="arrow-redo">↺</span></button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
     <p class="proj-footer">© Rosaria Gandar 2020</h3>

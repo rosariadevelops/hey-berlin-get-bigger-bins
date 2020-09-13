@@ -8,7 +8,7 @@
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
     ctx.lineWidth = 3;
-    ctx.strokeStyle = '#000000';
+    ctx.strokeStyle = '#ff3f00';
 
     let isDrawing = false;
     let x = 0;

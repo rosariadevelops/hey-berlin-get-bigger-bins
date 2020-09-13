@@ -7,45 +7,131 @@ body {
     background-color: #c2eaf7;
     font-family: sans-serif;
     text-align: center;
-    color: #ff3f00;
+    /* color: #ff3f00; */
+    color: #ff5600;
     font-family: 'archiv_grotesk_trialRgtrial', Helvetica, Arial, sans-serif;
     width: 100vw;
     min-height: 100vh;
-    border: 10px solid #ff3f00;
+    border: 10px solid #ff5600;
 }
 
 h1 {
     font-family: 'right_groteskwide_medium', Helvetica, Arial, sans-serif;
-    color: #ff3f00;
-    font-size: 100px;
-    margin: 0;
-}
-h2 {
+    color: #ff5600;
     font-size: 60px;
     margin: 0;
 }
-h3 {
+h2 {
     font-size: 40px;
     margin: 0;
 }
-h4 {
+h3 {
     font-size: 30px;
     margin: 0;
+    line-height: 34px;
+}
+h4 {
+    font-size: 20px;
+    margin: 0;
+}
+a {
+    transition: 500ms ease;
+    color: dodgerblue;
+}
+a:hover {
+    color: midnightblue;
 }
 
 /* -------------------------- NAVIGATION -------------------------*/
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    margin-bottom: 60px;
+}
 .logo {
     font-family: 'obrazecbold', Helvetica, Arial, sans-serif;
-    font-size: 20px;
+    font-size: 30px;
+}
+.nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+}
+.nav ul li:first-child {
+    padding-left: 0;
+}
+.nav ul li {
+    padding: 0 8px;
+}
+.nav ul li:last-child {
+    padding-right: 0;
+}
+.nav ul li a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #ff5600;
+    transition: 500ms ease;
+}
+.nav ul li a:hover {
+    color: dodgerblue;
+}
+
+/* -------------------------- SHARED ELEMENTS -------------------------*/
+main {
+    background-color: #c2eaf7;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23ff5600' fill-opacity='0.6' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+    min-height: calc(100vh - 20px);
+}
+.page-container {
+    padding-top: 100px;
+    background: rgba(194, 234, 247, 0);
+    background: -moz-linear-gradient(180deg, rgba(194, 234, 247, 0.7) 0%, rgba(194, 234, 247, 1) 80%);
+    background: -webkit-linear-gradient(180deg, rgba(194, 234, 247, 0.7) 0%, rgba(194, 234, 247, 1) 80%);
+    background: linear-gradient(180deg, rgba(194, 234, 247, 0.7) 0%, rgba(194, 234, 247, 1) 80%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#c2eaf7",endColorstr="#c2eaf7",GradientType=1);
+    min-height: calc(100vh - 20px);
+}
+.page-nav-container {
+    background: rgba(194, 234, 247, 0);
+    background: -moz-linear-gradient(180deg, rgba(194, 234, 247, 0.7) 0%, rgba(194, 234, 247, 1) 80%);
+    background: -webkit-linear-gradient(180deg, rgba(194, 234, 247, 0.7) 0%, rgba(194, 234, 247, 1) 80%);
+    background: linear-gradient(180deg, rgba(194, 234, 247, 0.7) 0%, rgba(194, 234, 247, 1) 80%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#c2eaf7",endColorstr="#c2eaf7",GradientType=1);
+    min-height: calc(100vh - 20px);
+}
+.title-container {
+    padding-bottom: 25px;
+}
+.sub {
+    font-size: 30px;
+    margin: 0 auto;
+    line-height: 34px;
+    max-width: 650px;
 }
 
 /* -------------------------- WELCOME PAGE -------------------------*/
+.welcome-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 20px);
+    align-items: center;
+    justify-content: center;
+    background: rgba(194, 234, 247, 0);
+    background: -moz-linear-gradient(180deg, rgba(194, 234, 247, 0) 30%, rgba(194, 234, 247, 1) 100%);
+    background: -webkit-linear-gradient(180deg, rgba(194, 234, 247, 0) 30%, rgba(194, 234, 247, 1) 100%);
+    background: linear-gradient(180deg, rgba(194, 234, 247, 0) 30%, rgba(194, 234, 247, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#c2eaf7",endColorstr="#c2eaf7",GradientType=1);
+    min-height: calc(100vh - 20px);
+}
+
 h1.welcome {
     font-family: 'right_groteskwide_medium', Helvetica, Arial, sans-serif;
-    color: #ff3f00;
-    font-size: 7.5vw;
-    margin: 90px 0 60px;
-    line-height: 14vw;
+    color: #ff5600;
+    font-size: 7.45vw;
+    margin: 0;
+    line-height: 13vw;
 }
 span.bigger {
     font-family: 'right_groteskspatial_black', 'right_groteskwide_medium', Helvetica, Arial, sans-serif;
@@ -53,23 +139,84 @@ span.bigger {
 }
 
 .enter-link {
-    position: absolute;
-    bottom: 39px;
-    left: 10px;
-    right: 10px;
-    padding: 0px;
+    padding-top: 60px;
 }
 
 .enter-link a {
-    font-size: 60px;
+    font-size: 30px;
     letter-spacing: 0px;
-    padding: 20px 40px 0;
-    color: #ff3f00;
+    color: #ff5600;
     text-decoration: none;
+    position: relative;
     font-weight: bold;
+    text-align: center;
+    display: block;
+    padding-right: 47px;
+}
+.enter-profile .arrow-right {
+    font-size: 50px;
+    line-height: 2px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    top: 13px;
+}
+.enter-link a:hover {
+    padding-right: 55px;
 }
 
 /* -------------------------- REGISTRATION PAGE -------------------------*/
+.registration,
+.addprofile,
+.login {
+    display: flex;
+    flex-direction: column;
+    max-width: 550px;
+    margin: 0 auto;
+}
+.petition-form,
+.login-form,
+.addprofile-form {
+    padding: 50px 0 20px;
+    width: 350px;
+    text-align: left;
+    margin: 0 auto;
+}
+form label {
+    font-weight: bold;
+    font-size: 18px;
+    position: absolute;
+    margin-top: -90px;
+}
+form input {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-bottom: 2px solid #ff5600;
+    border-radius: 0px;
+    padding: 14px 2px 5px;
+    font-size: 18px;
+    font-family: 'archiv_grotesk_trialRgtrial', Helvetica, Arial, sans-serif;
+    color: #ff5600;
+    display: block;
+    margin: 3px auto 40px;
+    width: 350px;
+}
+form #website::placeholder {
+    font-style: italic;
+    color: #ff5600;
+    opacity: 0.5;
+}
+form input:focus {
+    color: dodgerblue;
+    border-bottom-color: dodgerblue;
+    outline: none;
+    font-style: normal !important;
+}
+form input:focus + label {
+    color: dodgerblue;
+}
+
 input:required:invalid,
 input:focus:invalid {
     -moz-box-shadow: none;
@@ -80,33 +227,313 @@ input:required:valid {
     box-shadow: none;
 }
 
+form button {
+    background: #ff5600;
+    border: none;
+    color: #c2eaf7;
+    width: 100%;
+    padding: 12px 8px;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+    margin-top: -20px;
+    cursor: pointer;
+    font-family: 'right_groteskwide_medium', Helvetica, Arial, sans-serif;
+    transition: 500ms ease;
+}
+form button:hover {
+    background: dodgerblue;
+}
+
+.has-account,
+.no-account {
+    line-height: 20px;
+}
+.has-account a,
+.no-account a {
+    display: block;
+}
+
 /* -------------------------- ADD PROFILE PAGE -------------------------*/
+.skip-profile {
+    text-align: center;
+    padding-top: 20px;
+}
+.skip-profile a {
+    font-size: 18px;
+    text-decoration: none;
+    position: relative;
+    font-weight: bold;
+    text-align: center;
+    display: block;
+    padding-right: 15px;
+}
+.skip-profile .arrow-right {
+    font-size: 35px;
+    line-height: 2px;
+    display: inline-block;
+    position: absolute;
+    top: 9px;
+    margin-left: 7px;
+    transition: 500ms ease;
+}
+.skip-profile a:hover .arrow-right {
+    color: black;
+    margin-left: 9px;
+}
 
 /* -------------------------- SIGNATURE PAGE -------------------------*/
+.signature {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    margin: 0 auto;
+}
+.signature-form {
+    padding: 50px 0 20px;
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+}
 canvas {
     border: 1px dashed;
+    margin-bottom: 30px;
 }
-.petition p,
-.petition form {
-    display: block;
-    margin: 20px;
+.signature-form button {
+    max-width: 350px;
+    margin: 0 auto;
 }
-.petition input,
-.petition canvas,
-.petition button {
-    display: block;
-    margin: 20px auto;
+.error-sig {
+    color: red;
+    font-size: 18px;
+    font-weight: bold;
 }
 
 /* -------------------------- PROFILE/THANKS PAGE -------------------------*/
+.portal {
+    padding: 0 50px 50px;
+    text-align: left;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.thanks {
+    display: flex;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.thanks-container .nav-sig a {
+    border-bottom: 2px solid;
+}
+.left {
+    width: 70%;
+    text-align: left;
+    padding-left: 50px;
+    padding-right: 25px;
+}
+.right {
+    width: 30%;
+    margin: 0 50px 0;
+    text-align: left;
+}
+
+.thanks .sig {
+    margin: 25px 0;
+}
+.thanks .sig img {
+    width: 95%;
+}
+.thanks h3 {
+    margin: 0;
+    line-height: 40px;
+    text-align: left;
+    font-size: 35px;
+    color: #ff5600;
+}
+.right div a {
+    margin: 0 0 25px;
+    border: none;
+    color: dodgerblue;
+    width: 100%;
+    padding: 0;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    font-family: 'right_groteskwide_medium', Helvetica, Arial, sans-serif;
+    transition: 500ms ease;
+    text-decoration: none;
+    display: block;
+}
+.right div form button {
+    margin: 10px 0 0;
+    background: transparent;
+    border: none;
+    color: dodgerblue;
+    width: 100%;
+    padding: 0;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    font-family: 'right_groteskwide_medium', Helvetica, Arial, sans-serif;
+    transition: 500ms ease;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+.right div a:hover,
+.right div form button:hover,
+.right div a:hover span,
+.right div form button:hover span {
+    color: midnightblue;
+}
+
+.links span {
+    display: inline-block;
+    transition: 200ms ease;
+}
+.right div a:hover .arrow-diag {
+    transform: translate(5px, -5px);
+}
+.arrow-right {
+    font-size: 32px;
+}
+.right div a:hover .arrow-right {
+    transform: translate(5px, 0px);
+}
+.arrow-redo {
+    font-size: 24px;
+}
+.right div form button:hover .arrow-redo {
+    transform: rotate(-45deg);
+}
 
 /* -------------------------- ALL SIGNERS PAGE -------------------------*/
-
 /* -------------------------- SIGNERS BY CITY PAGE -------------------------*/
+.signers {
+    display: flex;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.signers h4 {
+    margin: 0 0 30px;
+    line-height: 35px;
+    text-align: left;
+    font-size: 35px;
+    color: #ff5600;
+    letter-spacing: 1px;
+}
+.people p {
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 40px;
+    margin: 0;
+}
+.people p a {
+    color: #ff5600;
+}
+.people p a:hover {
+    color: dodgerblue;
+}
+.arrow-left {
+    font-size: 32px;
+}
 
 /* -------------------------- EDIT PROFILE PAGE -------------------------*/
+.profile-container .nav-prof a,
+.edit-container .nav-prof a {
+    border-bottom: 2px solid;
+}
+.profile,
+.edit-profile {
+    display: flex;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.profile h4,
+.edit-profile h4 {
+    margin: 0 0 30px;
+    line-height: 35px;
+    text-align: left;
+    font-size: 35px;
+    color: dodgerblue;
+    letter-spacing: 1px;
+}
+.profile table {
+    font-size: 22px;
+}
+.profile table tr {
+    padding: 10px 0;
+    line-height: 42px;
+}
+.profile table tr td:first-child {
+    font-style: italic;
+    padding-right: 40px;
+    vertical-align: top;
+}
+.profile table tr td img {
+    width: 250px;
+}
+
+.edit-form {
+    max-width: 350px;
+    margin: 40px auto 0;
+    text-align: left;
+}
+.edit-form form input {
+    margin-bottom: 60px;
+    display: block;
+    border-bottom-color: midnightblue;
+    color: midnightblue;
+}
+.edit-form form label {
+    margin-top: -110px;
+}
+.edit-form form input:focus {
+    margin-bottom: 60px;
+    display: block;
+    border-bottom-color: dodgerblue;
+    color: dodgerblue;
+}
+.edit-form form input:focus + label {
+    color: #ff5600;
+}
+.update-nav {
+    margin-top: -30px;
+}
+.update-nav button {
+    margin-top: 0;
+}
+.negatives {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px auto 150px;
+}
+.negatives .delete-prof a {
+    color: red;
+}
+.negatives .delete-prof a:hover {
+    color: midnightblue;
+}
 
 /* -------------------------- DELETE PROFILE PAGE -------------------------*/
+.deleteprofile-container .title-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+.delete-profile {
+    width: 350px;
+    margin: 50px auto 0;
+}
+.delete-profile button {
+    margin-top: 0;
+}
+.delete-profile .cancel {
+    margin: 25px auto 0;
+}
+.delete-profile .cancel a {
+    color: dodgerblue;
+}
+.delete-profile .cancel a:hover {
+    color: midnightblue;
+}
 
 /* -------------------------- LOG-IN PAGE -------------------------*/
 
@@ -121,16 +548,6 @@ canvas {
     visibility: visible;
 }
 
-.edit-form form {
-    max-width: 250px;
-    margin: 0 auto;
-    text-align: left;
-}
-.edit-form form input {
-    margin-bottom: 20px;
-    display: block;
-}
-
 .proj-footer {
     display: none;
     position: absolute;
@@ -143,4 +560,40 @@ canvas {
     text-transform: uppercase;
     letter-spacing: 1px;
     transform: rotate(90deg);
+}
+
+/* -------------------------- MEDIA QUERIES - SMALLER SCREENS -------------------------*/
+@media screen and (max-witdh: 768px) {
+    h1.welcome {
+        font-size: 12.8vw;
+    }
+    span.bigger {
+        font-size: 21.5vw;
+        line-height: 21vw;
+    }
+}
+
+@media screen and (max-witdh: 500px) {
+    h1.welcome {
+        font-size: 12vw;
+        line-height: 13vw;
+    }
+    span.bigger {
+        font-size: 20.1vw;
+        line-height: 19vw;
+    }
+    .enter-link {
+        padding: 50px 15px 0;
+    }
+    .enter-link a {
+        text-align: center;
+        display: block;
+        padding-right: 0;
+    }
+    .arrow-right {
+        display: block;
+        right: 0;
+        top: -20px;
+        left: 0;
+    }
 }

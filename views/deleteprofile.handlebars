@@ -1,16 +1,17 @@
-{{> nav }}
-<div class="deleteprofile-container">
+
+<div class="deleteprofile-container page-nav-container">
+    {{> nav }}
     <div class="title-container">
-        <h1>{{title}}</h1>
+        <h1>Are you sure you want to delete your profile?</h1>
     </div>
     <div class="deleteprofile">
-        <p>Are you sure you want to delete your profile?</h3>
-        <p>This will log you out and delete all of your personal data.</p>
+        <h3>This will log you out and delete all of your personal data.</h3>
         <div class="delete-profile">
             <form method="POST">
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
-                <p><a href="/profile/edit"></a>Cancel</p>
+                
                 <button type="submit" name="submitted" value="submitted">Throw my trash out!</button>
+                <p class="cancel"><a href="/profile">Cancel</a></p>
             </form>
         </div>
     </div>

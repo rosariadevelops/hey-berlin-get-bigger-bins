@@ -1,12 +1,14 @@
-<div class="login-container">
+<div class="login-container page-container">
     <div class="title-container">
         <h1>Sign-in to your account.</h1>
     </div>
     <div class="login">
         <div class="login-form">
             <form method="POST">
-                <input type="email" name="email" placeholder="Email Address" autocomplete="off">
-                <input type="password" name="password" placeholder="Password" autocomplete="off">
+                <input type="email" name="email" id="email" autocomplete="off">
+                <label for="email">Email</label>
+                <input type="password" name="password" id="password" autocomplete="off">
+                <label for="password">Password</label>
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <button type="submit" name="submitted" value="submitted">Log in</button>
                 {{#if emptyerror}}
@@ -17,7 +19,7 @@
                 {{/if}}
             </form>
         </div>
-        <p class="no-account">Don't have an account? <a href="/sign-up">Sign-up here</a></p>
+        <p class="no-account">Don't have an account?<a href="/sign-up">Sign-up here</a></p>
     </div>
     <p class="proj-footer">© Rosaria Gandar 2020</h3>
 </div>

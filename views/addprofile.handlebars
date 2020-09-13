@@ -1,18 +1,21 @@
-<div class="profile-container">
+<div class="addprofile-container page-container">
     <div class="title-container">
         <h1>Complete your profile</h1>
     </div>
-    <div class="profile">
-        <p>Please add some more information</h3>
-        <div class="profile-form">
+    <div class="addprofile">
+        <h3>Add more to your profile to add more to our bins.</h3>
+        <div class="addprofile-form">
             <form method="POST" autocomplete="off">
-                <input type="text" name="age" placeholder="Age" autocomplete="off" >
-                <input type="text" name="city" placeholder="City" autocomplete="off" >
-                <input type="url" name="url" pattern="https?://.+" value="https://" placeholder="Website" autocomplete="off" >
+                <input type="text" name="age" id="age" autocomplete="off" >
+                <label for="age">Age</label>
+                <input type="text" name="city" id="city" autocomplete="off" >
+                <label for="city">City of Residence</label>
+                <input type="url" name="url" id="website" pattern="https?://.+" placeholder="https://" autocomplete="off" >
+                <label for="website">Website</label>
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <button type="submit" name="submitted" value="submitted">Submit</button>
             </form>
-            <div class="skip-profile"><p><a href="/petition">Skip this step ></a></p></div>
+            <div class="skip-profile"><p><a href="/petition">Skip this step <span class="arrow-right">↝</span></a></p></div>
         </div>
     </div>
     <p class="proj-footer">© Rosaria Gandar 2020</h3>

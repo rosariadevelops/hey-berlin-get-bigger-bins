@@ -1,32 +1,45 @@
-{{> nav }}
-<div class="signers-container">
-    <div class="title-container">
-        <h1>{{title}}</h1>
+<div class="signers-container page-nav-container">
+    {{> nav }}
+
+    <div class="title-container portal">
+        {{#if cityPage}}
+            <h1 class="city">{{city}} looking clean already!</h1>
+        {{else}}
+            <h1>Other clean souls</h1>
+        {{/if}}   
     </div>
     <div class="signers">
-        <p>We the people demand that this important topic be brought to justice</h3>
-        <p>{{numOfSigs}} have signed. Goal: 1 million</p>
-        {{!-- <div class="thermometer">Should I make this a partial?</div> --}}
-        <div class="people">
-            {{#allSigners}}
-                {{#if url}}
-                    <p><a href={{url}}>{{firstname}} {{lastname}}</a> | {{#if age}}{{age}} | {{/if}}<a href="/signers/{{city}}">{{city}}</a></p>
-                {{else }}
-                    <p>{{firstname}} {{lastname}} | {{#if age}}{{age}} | {{/if}} <a href="/signers/{{city}}">{{city}}</a></p>
-                {{/if}}
-            {{/allSigners}}
-        </div>
-        {{!-- {{#if city}}
-            <div class="cityblock">
+        <div class="left">
+            <div class="people">
                 {{#allSigners}}
                     {{#if url}}
-                        <p><a href={{url}}>{{firstname}} {{lastname}}</a> | {{#if age}}{{age}}</p>
-                    {{else }}
-                        <p>{{firstname}} {{lastname}} | {{#if age}}{{age}} | {{/if}}</p>
+                        <p><a target="_blank" href={{url}}>{{firstname}} {{lastname}}</a>{{#if age}} / {{age}}{{/if}}{{#if cityPage}} {{else}} / <a href="/signers/{{city}}">{{city}}</a>{{/if}}</p>
+                    {{else}}
+                        <p>{{firstname}} {{lastname}}{{#if age}} / {{age}}{{/if}}{{#if cityPage}} {{else}} / <a href="/signers/{{city}}">{{city}}</a>{{/if}}</p>
                     {{/if}}
                 {{/allSigners}}
+            </div> 
+        </div>
+        <div class="right">
+            <div>
+                <h4><b>{{numOfSigs}}</b> SIGNERS</h4>
             </div>
-        {{/if}} --}}
+            <div class="links">
+                {{#if cityPage}}
+                    <div>
+                        <p class="back-to-signers"><a href="/signers"><span class="arrow-left">←</span> Back to all Signers</a></p>
+                    </div>
+                {{/if}}
+                <div><a href="/signers">View your signature</a></div>
+                <div><a href="/profile">View your Profile <span class="arrow-right">→</span></a></div>
+                <div class="delete-sig">
+                    <form method="POST">
+                        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                        <button type="submit" name="submitted" value="submitted">Re-do your Signature <span class="arrow-redo">↺</span></button>
+                    </form>
+                </div>
+            </div>
+        </div>
         
     </div>
     <p class="proj-footer">© Rosaria Gandar 2020</h3>

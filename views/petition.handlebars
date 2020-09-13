@@ -1,18 +1,19 @@
-<div class="petition-container">
+<div class="petition-container page-container">
     <div class="title-container">
-        <h1>{{title}}</h1>
+        <h1>Please add your signature</h1>
     </div>
-    <div class="petition">
-        <p>Sign our petition to make whatever this petition supports actually happen!</h3>
-        <div class="petition-form">
+    <div class="signature">
+        <h3 class="sub">Get drawing, trash panda!</h3>
+        <div class="signature-form">
             <form method="POST">
                 {{!-- <input id="fname" type="text" name="fname" placeholder="First Name" autocomplete="off" required>
                 <input id="lname" type="text" name="lname" placeholder="Last Name" autocomplete="off" required> --}}
-                <canvas id="canvas" width="600" height="200"></canvas>
+                <canvas id="canvas" width="598" height="200"></canvas>
                 <input type="hidden" name="sig" id="hidden">
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
-                <p id={{class}}>{{error}}</p>
+                
                 <button type="submit" name="submitted" value="submitted">Submit</button>
+                <p class="error-sig">{{sigerror}}</p>
             </form>
         </div>
     </div>

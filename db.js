@@ -147,11 +147,23 @@ module.exports.deleteSig = (user_id) => {
     );
 };
 
+module.exports.getUserRow = (user_id) => {
+    return db.query(
+        `
+    SELECT * FROM users
+    JOIN sigs
+    ON users.id = sigs.user_id
+    JOIN user_profiles
+    ON sigs.user_id = user_profiles.user_id
+    WHERE user_id = ($1);`,
+        [user_id]
+    );
+};
 module.exports.deleteUser = (user_id) => {
     return db.query(
         `
         DELETE FROM users
-        WHERE user_id = ($1);`,
+        WHERE id = ($1);`,
         [user_id]
     );
 };

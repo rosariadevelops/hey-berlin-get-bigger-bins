@@ -94,14 +94,10 @@ app.post('/sign-up', (req, res) => {
             class: '"error"',
         });
     } else {
-        // we need to hash directly upon POST request
-        // plain text password is never written
-        // I currently have a glaring issue in that the text password is stored in the header
         bc.hash(password)
             .then((password) => {
                 const pword = password;
                 console.log('req body password: ', pword);
-                // return example:  $2a$10$zpPuwhpqORBO0pbDTFgxSO0hAIKDsXbn0twuDAZCmNtAEI.iLA5RS
                 db.addUser(firstname, lastname, email, pword).then((result) => {
                     req.session.userId = result.rows[0].id;
                     console.log('user created');
@@ -130,6 +126,7 @@ app.post('/addprofile', (req, res) => {
     db.createProfile(age, city, url, user_id)
         .then((profile) => {
             console.log('profile: ', profile);
+            req.session.hasSigned = false;
             res.redirect('/petition');
         })
         .catch((err) => {
@@ -226,20 +223,31 @@ app.post('/petition', (req, res) => {
 // THANKS GET REQUEST
 app.get('/thanks', requireLoggedOutUser, requireHasNotSigned, (req, res) => {
     let userSigId = req.session.sigIdNumber;
-    db.getSignedUsers().then((signee) => {
+    let userId = req.session.userId;
+
+    db.getSignedUsers().then((rowResult) => {
+        //console.log('row count: ', rowResult);
+        const sigCount = rowResult.rows[0].count;
+        console.log('row count: ', sigCount);
         db.getSignature(userSigId)
             .then((result) => {
-                const numOfSigs = result.rows.length;
-                console.log('numOfSigs: ', numOfSigs);
-                console.log;
-                const userSig = signee.rows[0].sig;
+                //console.log('result.rows: ', result.rows);
+                const userSig = result.rows[0].sig;
                 // let firstName = userFirst.charAt(0).toUpperCase() + userFirst.slice(1);
                 // let lastName = userLast.charAt(0).toUpperCase() + userLast.slice(1);
-                res.render('thanks', {
-                    layout: 'main',
-                    title: 'Thank you!',
-                    userSig,
-                    numOfSigs,
+
+                db.getUserInfo(userId).then((data) => {
+                    const userDetails = data.rows[0];
+                    console.log('userDetails: ', userDetails);
+                    const { firstname, lastname } = userDetails;
+
+                    res.render('thanks', {
+                        layout: 'main',
+                        userSig,
+                        sigCount,
+                        firstname,
+                        lastname,
+                    });
                 });
             })
             .catch((err) => {
@@ -255,7 +263,6 @@ app.post('/thanks', (req, res) => {
     const user_id = req.session.userId;
     console.log('user_id: ', user_id);
     console.log('hasSigned before delete: ', req.session.hasSigned);
-
     db.deleteSig(user_id)
         .then((result) => {
             console.log('result: ', result);
@@ -263,34 +270,6 @@ app.post('/thanks', (req, res) => {
             req.session.hasSigned = null;
             console.log('req.session.hasSigned after delete: ', req.session.hasSigned);
             res.redirect('/petition');
-        })
-        .catch((err) => {
-            console.log('err in deleteSig: ', err);
-        });
-});
-
-// CONFIRMATION PAGE TO DELETE PROFILE GET REQUEST
-app.get('/profile/delete', requireLoggedOutUser, requireHasNotSigned, (req, res) => {
-    res.render('deleteprofile', {
-        layout: 'main',
-    });
-});
-
-// CONFIRMATION PAGE TO DELETE PROFILE POST REQUEST
-app.post('/profile/delete', (req, res) => {
-    console.log('req body: ', req.body);
-    let { user_id } = req.body;
-    user_id = req.session.userId;
-    //console.log('user_id: ', user_id);
-
-    db.deleteUser(user_id)
-        .then((result) => {
-            console.log('result: ', result);
-            console.log('user_id value after delete: ', user_id);
-            req.session.hasSigned = null;
-            req.session.userId = null;
-            console.log('user has been deleted');
-            res.redirect('/sign-up');
         })
         .catch((err) => {
             console.log('err in deleteSig: ', err);
@@ -309,6 +288,7 @@ app.get('/signers', requireLoggedOutUser, requireHasNotSigned, (req, res) => {
                 title: 'Like-minded individuals',
                 numOfSigs,
                 allSigners,
+                linkTocCity: true,
             });
         })
         .catch((err) => {
@@ -319,19 +299,62 @@ app.get('/signers', requireLoggedOutUser, requireHasNotSigned, (req, res) => {
 // SIGNERS BY CITY TEMPLATE GET REQUEST
 app.get('/signers/:city', requireLoggedOutUser, requireHasNotSigned, (req, res) => {
     let { city } = req.params;
-    console.log('city: ', city);
+
     db.getCity(city).then((cityData) => {
         console.log('city data: ', cityData.rows);
         const numOfSigs = cityData.rows.length;
         console.log('numOfSigs: ', numOfSigs);
+        console.log('city: ', city);
         const allSigners = cityData.rows;
         res.render('signers', {
             layout: 'main',
             title: 'All fellow signers from: ',
             city,
+            cityPage: city,
             numOfSigs,
             allSigners,
         });
+    });
+});
+
+// PROFILE PAGE GET REQUEST
+app.get('/profile', requireLoggedOutUser, requireHasNotSigned, (req, res) => {
+    let userId = req.session.userId;
+    let userSigId = req.session.sigIdNumber;
+    console.log('userId: ', req.session.userId);
+    console.log('profile page');
+
+    db.getSignedUsers().then(() => {
+        db.getSignature(userSigId)
+            .then((result) => {
+                console.log('result.rows: ', result.rows);
+                const numOfSigs = result.rows.length;
+                console.log('numOfSigs: ', numOfSigs);
+                const userSig = result.rows[0].sig;
+                // let firstName = userFirst.charAt(0).toUpperCase() + userFirst.slice(1);
+                // let lastName = userLast.charAt(0).toUpperCase() + userLast.slice(1);
+
+                db.getUserInfo(userId).then((data) => {
+                    const userDetails = data.rows[0];
+                    console.log('userDetails: ', userDetails);
+                    const { firstname, lastname, email, password, age, city, url } = userDetails;
+
+                    res.render('profile', {
+                        layout: 'main',
+                        firstname,
+                        lastname,
+                        email,
+                        password,
+                        age,
+                        city,
+                        url,
+                        userSig,
+                    });
+                });
+            })
+            .catch((err) => {
+                console.log('err in getSignature: ', err);
+            });
     });
 });
 
@@ -423,10 +446,44 @@ app.post('/profile/edit', (req, res) => {
     }
 });
 
+// CONFIRMATION PAGE TO DELETE PROFILE GET REQUEST
+app.get('/profile/delete', requireLoggedOutUser, requireHasNotSigned, (req, res) => {
+    res.render('deleteprofile', {
+        layout: 'main',
+    });
+});
+
+// CONFIRMATION PAGE TO DELETE PROFILE POST REQUEST
+app.post('/profile/delete', (req, res) => {
+    console.log('req body: ', req.body);
+    //let { user_id } = req.body;
+    let userId = req.session.userId;
+    console.log('user_id value before delete: ', userId);
+    //console.log('user_id: ', user_id);
+    // db.getUserRow(userId)
+    //     .then((result) => {
+    //         console.log('result: ', result);
+    db.deleteUser(userId)
+        .then((data) => {
+            console.log('data: ', data);
+            console.log('user_id value after delete: ', userId);
+            req.session.hasSigned = null;
+            req.session.userId = null;
+            console.log('user has been deleted');
+            res.redirect('/sign-up');
+            //});
+        })
+        .catch((err) => {
+            console.log('err in deleteUser: ', err);
+        });
+});
+
 // LOGOUT GET REQUEST
 app.get('/signout', (req, res) => {
     req.session.userId = null;
     req.session.hasLoggedIn = null;
+    console.log('req.session.userId: ', req.session.userId);
+    console.log('req.session.hasLoggedIn: ', req.session.hasLoggedIn);
     res.redirect('/sign-in');
 });
 
