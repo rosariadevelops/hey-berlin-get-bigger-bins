@@ -17,20 +17,14 @@ CREATE TABLE user_profiles (
     age INT,
     city VARCHAR(255),
     url VARCHAR(255),
-    user_id INT NOT NULL UNIQUE
-    FOREIGN KEY (user_id)
-        REFERENCES users (id)
-        ON DELETE CASCADE
+    user_id INT NOT NULL UNIQUE REFERENCES users (id) ON DELETE CASCADE
 );
 
 
-DROP TABLE IF EXISTS sigs;
+DROP TABLE IF EXISTS sigs CASCADE;
 
 CREATE TABLE sigs (
     id SERIAL PRIMARY KEY,
     sig VARCHAR NOT NULL CHECK (sig != ''),
-    user_id INT NOT NULL UNIQUE,
-    FOREIGN KEY (user_id)
-        REFERENCES users (id)
-        ON DELETE CASCADE
+    user_id INT NOT NULL UNIQUE REFERENCES users (id) ON DELETE CASCADE
 );

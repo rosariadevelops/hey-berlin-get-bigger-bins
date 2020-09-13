@@ -36,4 +36,18 @@
         hiddenInput.val(dataURL);
         console.log('dataURL: ', dataURL);
     });
+
+    canvas.on('touchstart', (event) => {
+        isDrawing = true;
+        [x, y] = [event.offsetX, event.offsetY];
+    });
+
+    canvas.on('touchmove', drawSig);
+
+    canvas.on('touchend', () => {
+        isDrawing = false;
+        let dataURL = canvas[0].toDataURL();
+        hiddenInput.val(dataURL);
+        console.log('dataURL: ', dataURL);
+    });
 })();

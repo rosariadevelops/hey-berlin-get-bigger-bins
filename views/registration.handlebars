@@ -17,6 +17,9 @@
                 
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <button type="submit" name="submitted" value="submitted">Sign-up</button>
+                {{#if error}}
+                    <p>{{error}}</p>
+                {{/if}}
             </form>
         </div>
         <p class="has-account">Already have an account? <a href="/sign-in">Sign-in</a></p>
