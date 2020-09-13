@@ -138,8 +138,23 @@ span.bigger {
     font-size: 21.7vw;
 }
 
-.enter-link {
+.enter {
     padding-top: 60px;
+}
+.enter p {
+    font-size: 30px;
+    letter-spacing: 0px;
+    color: #ff5600;
+    text-decoration: none;
+    position: relative;
+    font-weight: bold;
+    text-align: center;
+    display: block;
+    padding-right: 47px;
+    margin: 0;
+}
+.enter p a {
+    text-decoration: none;
 }
 
 .enter-link a {
@@ -153,16 +168,18 @@ span.bigger {
     display: block;
     padding-right: 47px;
 }
-.enter-profile .arrow-right {
-    font-size: 50px;
-    line-height: 2px;
+.enter-link a .arrow-right {
+    font-size: 40px;
     display: inline-block;
-    position: absolute;
-    right: 0;
-    top: 13px;
+    transition: 500ms ease;
 }
 .enter-link a:hover {
     padding-right: 55px;
+}
+.enter-link a:hover .arrow-right {
+    transform: translateX(10px);
+    display: inline-block;
+    transition: 500ms ease;
 }
 
 /* -------------------------- REGISTRATION PAGE -------------------------*/
@@ -343,10 +360,14 @@ canvas {
 }
 .thanks h3 {
     margin: 0;
-    line-height: 40px;
+    line-height: 38px;
     text-align: left;
-    font-size: 35px;
+    font-size: 30px;
     color: #ff5600;
+}
+.thanks h3 .sig-count {
+    margin-bottom: 20px;
+    display: block;
 }
 .right div a {
     margin: 0 0 25px;
