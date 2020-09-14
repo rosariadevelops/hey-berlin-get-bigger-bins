@@ -12,6 +12,7 @@
                 <label for="city">City of Residence</label>
                 <input type="url" name="url" id="website" pattern="https?://.+" placeholder="https://" autocomplete="off" >
                 <label for="website">Website</label>
+                {{#if error}}<p class="error">{{error}}</p>{{/if}}
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <button type="submit" name="submitted" value="submitted">Submit</button>
             </form>

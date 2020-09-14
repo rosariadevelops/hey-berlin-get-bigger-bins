@@ -11,8 +11,11 @@
     ctx.strokeStyle = '#ff3f00';
 
     let isDrawing = false;
+    let isTouching = false;
     let x = 0;
     let y = 0;
+    let touchX = 0;
+    let touchY = 0;
 
     function drawSig(sig) {
         if (!isDrawing) return;
@@ -21,6 +24,17 @@
         ctx.lineTo(sig.offsetX, sig.offsetY);
         ctx.stroke();
         [x, y] = [sig.offsetX, sig.offsetY];
+    }
+
+    function touchSig(sig) {
+        if (!isTouching) return;
+        ctx.beginPath();
+        // part where it can tel if being touched
+        ctx.moveTo(touchX - canvas.getBoundingClientRect().left, touchY - canvas.getBoundingClientRect().top);
+        ctx.lineTo(touchX - canvas.getBoundingClientRect().left, touchY - canvas.getBoundingClientRect().top);
+        ctx.stroke();
+        [touchX, touchY] = [sig.touches[0].clientX, sig.touches[0].clientY];
+        console.log('touchSig working');
     }
 
     canvas.on('mousedown', (event) => {
@@ -38,14 +52,14 @@
     });
 
     canvas.on('touchstart', (event) => {
-        isDrawing = true;
-        [x, y] = [event.offsetX, event.offsetY];
+        isTouching = true;
+        [touchX, touchY] = [event.touches[0].clientX, event.touches[0].clientY];
     });
 
-    canvas.on('touchmove', drawSig);
+    canvas.on('touchmove', touchSig);
 
     canvas.on('touchend', () => {
-        isDrawing = false;
+        isTouching = false;
         let dataURL = canvas[0].toDataURL();
         hiddenInput.val(dataURL);
         console.log('dataURL: ', dataURL);

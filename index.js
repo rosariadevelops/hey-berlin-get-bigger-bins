@@ -123,11 +123,24 @@ app.post('/addprofile', (req, res) => {
     user_id = req.session.userId;
     console.log('req.body: ', req.body);
 
+    function checkURL(url) {
+        if (url.startsWith('http://') || url.startsWith('https://') || url.includes(';')) {
+            console.log('url input is valid: ', url);
+            res.redirect('/petition');
+        } else {
+            console.log('url input is invalid');
+            res.render('addprofile', {
+                layout: 'main',
+                error: 'Please make sure the URL input is a valid website.',
+            });
+        }
+    }
+
     db.createProfile(age, city, url, user_id)
         .then((profile) => {
+            checkURL(url);
             console.log('profile: ', profile);
             req.session.hasSigned = false;
-            res.redirect('/petition');
         })
         .catch((err) => {
             console.log('err in createProfile: ', err);
